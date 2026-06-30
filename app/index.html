@@ -55,7 +55,7 @@
       </section>
 
       <section id="kalkulator" class="section calculator-layout">
-        <form id="quote-form" class="panel">
+        <form id="quote-form" class="panel" novalidate>
           <p class="eyebrow">Kalkulator</p>
           <h2>Informativni izračun</h2>
 
@@ -106,8 +106,57 @@
           </div>
 
           <fieldset>
+            <legend>Detajli strehe</legend>
+
+            <div class="field">
+              <label for="roofPitch">Naklon strehe <span class="required">(obvezno)</span></label>
+              <select id="roofPitch" name="roofPitch" required>
+                <option value="low">Nizek / enostaven naklon</option>
+                <option value="normal" selected>Običajen naklon</option>
+                <option value="steep">Strm / zahtevnejši naklon</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="chimneyCount">Število dimnikov</label>
+              <input id="chimneyCount" name="chimneyCount" type="number" min="0" step="1" value="0" inputmode="numeric" />
+            </div>
+
+            <div class="field">
+              <label for="roofWindowCount">Število strešnih oken</label>
+              <input id="roofWindowCount" name="roofWindowCount" type="number" min="0" step="1" value="0" inputmode="numeric" />
+            </div>
+
+            <div class="field">
+              <label for="flashingComplexity">Zahtevnost kleparskih detajlov <span class="required">(obvezno)</span></label>
+              <select id="flashingComplexity" name="flashingComplexity" required>
+                <option value="basic">Osnovni kleparski detajli</option>
+                <option value="normal" selected>Običajni kleparski detajli</option>
+                <option value="complex">Zahtevni kleparski detajli</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="existingRoofRemoval">Odstranitev obstoječe kritine <span class="required">(obvezno)</span></label>
+              <select id="existingRoofRemoval" name="existingRoofRemoval" required>
+                <option value="none">Brez odstranitve</option>
+                <option value="simple" selected>Enostavna odstranitev</option>
+                <option value="difficult">Zahtevna odstranitev</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="wasteHandling">Odvoz odpadnega materiala <span class="required">(obvezno)</span></label>
+              <select id="wasteHandling" name="wasteHandling" required>
+                <option value="none">Ni vključeno</option>
+                <option value="normal" selected>Vključen običajen odvoz</option>
+                <option value="difficult">Vključen odvoz pri zahtevnem dostopu</option>
+              </select>
+            </div>
+          </fieldset>
+
+          <fieldset>
             <legend>Dodatna dela</legend>
-            <label class="check"><input name="tearOff" type="checkbox" checked /> Odstranitev stare kritine</label>
             <label class="check"><input name="insulation" type="checkbox" /> Toplotna izolacija</label>
             <label class="check"><input name="gutters" type="checkbox" checked /> Žlebovi in osnovna kleparska dela</label>
           </fieldset>
@@ -134,7 +183,7 @@
             V naslednji fazi bo obrazec povezan z emailom ali CRM sistemom. V tem prototipu se pripravi osnutek emaila.
           </p>
         </div>
-        <form id="lead-form" class="panel">
+        <form id="lead-form" class="panel" novalidate>
           <div id="lead-error" class="form-error" role="alert" hidden></div>
 
           <div class="field">
