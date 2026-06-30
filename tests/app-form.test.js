@@ -11,6 +11,11 @@ test('lead form blocks missing consent and includes the latest estimate when con
   assert.match(html, /name="flashingComplexity"/);
   assert.match(html, /name="existingRoofRemoval"/);
   assert.match(html, /name="wasteHandling"/);
+  assert.match(html, /name="vaporPermeableMembrane"/);
+  assert.match(html, /name="roofBoarding"/);
+  assert.match(html, /name="roofVentCount"/);
+  assert.match(html, /name="gutterLength"/);
+  assert.match(html, /name="siteSetup"/);
 
   const {
     quoteForm,
@@ -60,6 +65,38 @@ test('lead form blocks missing consent and includes the latest estimate when con
   assert.match(quoteError.textContent, /Število strešnih oken mora biti celo število 0 ali več/);
 
   quoteForm.setValue('roofWindowCount', '1');
+  quoteForm.setValue('roofVentCount', '-1');
+  quoteForm.submit();
+  assert.equal(quoteError.hidden, false);
+  assert.match(quoteError.textContent, /Število zračnikov na strehi mora biti celo število 0 ali več/);
+
+  quoteForm.setValue('roofVentCount', '2');
+  quoteForm.setValue('gutterLength', '-1');
+  quoteForm.submit();
+  assert.equal(quoteError.hidden, false);
+  assert.match(quoteError.textContent, /Dolžina žleba mora biti število 0 ali več/);
+
+  quoteForm.setValue('gutterLength', '24');
+  quoteForm.setValue('downpipeLength', '-1');
+  quoteForm.submit();
+  assert.equal(quoteError.hidden, false);
+  assert.match(quoteError.textContent, /Dolžina vertikalne odtočne cevi mora biti število 0 ali več/);
+
+  quoteForm.setValue('downpipeLength', '12');
+  quoteForm.setChecked('vaporPermeableMembrane', true);
+  quoteForm.setChecked('roofBoarding', true);
+  quoteForm.setChecked('roofBattens', true);
+  quoteForm.setChecked('counterBattens', true);
+  quoteForm.setChecked('ventilationLayer', true);
+  quoteForm.setChecked('ridgeTiles', true);
+  quoteForm.setChecked('edgeTiles', true);
+  quoteForm.setChecked('snowGuards', true);
+  quoteForm.setChecked('valleyFlashing', true);
+  quoteForm.setChecked('eavesFlashing', true);
+  quoteForm.setChecked('windBoardFlashing', true);
+  quoteForm.setChecked('scaffolding', true);
+  quoteForm.setChecked('manualMaterialCarry', true);
+  quoteForm.setChecked('siteSetup', true);
   quoteForm.setSelect('complexity', 'complex', 'Zahtevna');
   quoteForm.setSelect('access', 'very_difficult', 'Zelo zahtevna');
   quoteForm.setSelect('roofPitch', 'steep', 'Strm / zahtevnejši naklon');
@@ -73,9 +110,15 @@ test('lead form blocks missing consent and includes the latest estimate when con
   assert.ok(hasRenderedText(priceDrivers, 'Strm / zahtevnejši naklon'));
   assert.ok(hasRenderedText(priceDrivers, '2 dimnika'));
   assert.ok(hasRenderedText(priceDrivers, '1 strešno okno'));
+  assert.ok(hasRenderedText(priceDrivers, 'Paroprepustna folija'));
+  assert.ok(hasRenderedText(priceDrivers, 'Deskanje / opaž'));
+  assert.ok(hasRenderedText(priceDrivers, 'žleb (24 m)'));
+  assert.ok(hasRenderedText(priceDrivers, 'Postavitev gradbišča'));
   assert.ok(hasRenderedText(selectedSummary, 'Opečna kritina'));
   assert.ok(hasRenderedText(selectedSummary, 'Zahtevni kleparski detajli'));
+  assert.ok(hasRenderedText(selectedSummary, 'Snegolovi'));
   assert.ok(hasRenderedText(includedItems, 'Vključen odvoz pri zahtevnem dostopu'));
+  assert.ok(hasRenderedText(includedItems, 'Ročni prenos materiala'));
   assert.ok(hasRenderedText(notConfirmed, 'dejansko stanje konstrukcije'));
 
   leadForm.submit();
@@ -107,8 +150,15 @@ test('lead form blocks missing consent and includes the latest estimate when con
   assert.match(body, /Zahtevnost kleparskih detajlov: Zahtevni kleparski detajli/);
   assert.match(body, /Odstranitev obstoječe kritine: Zahtevna odstranitev/);
   assert.match(body, /Odvoz odpadnega materiala: Vključen odvoz pri zahtevnem dostopu/);
+  assert.match(body, /Žlebovi in osnovna kleparska dela: preskočeno, ker so vnesene natančne dolžine/);
+  assert.match(body, /Dodatne postavke strehe: .*Paroprepustna folija/);
+  assert.match(body, /Dodatne postavke strehe: .*žleb \(24 m\)/);
+  assert.match(body, /Dodatne postavke strehe: .*Postavitev gradbišča/);
   assert.match(body, /Dejavniki, ki vplivajo na oceno\n---/);
   assert.match(body, /- Strm \/ zahtevnejši naklon/);
+  assert.match(body, /- Deskanje \/ opaž/);
+  assert.match(body, /- žleb \(24 m\)/);
+  assert.doesNotMatch(body, /- žlebovi in osnovna kleparska dela/);
   assert.match(body, /Kaj še ni potrjeno\n---/);
   assert.match(body, /- dejansko stanje konstrukcije/);
   assert.match(body, /Soglasje\n---/);
@@ -212,8 +262,25 @@ function setupDom() {
       area: '180',
       chimneyCount: '0',
       roofWindowCount: '0',
+      roofVentCount: '0',
+      gutterLength: '0',
+      downpipeLength: '0',
       insulation: false,
       gutters: true,
+      vaporPermeableMembrane: false,
+      roofBoarding: false,
+      roofBattens: false,
+      counterBattens: false,
+      ventilationLayer: false,
+      ridgeTiles: false,
+      edgeTiles: false,
+      snowGuards: false,
+      valleyFlashing: false,
+      eavesFlashing: false,
+      windBoardFlashing: false,
+      scaffolding: false,
+      manualMaterialCarry: false,
+      siteSetup: false,
     },
     {
       roofType: new FakeSelect('dvokapnica', 'Dvokapnica'),

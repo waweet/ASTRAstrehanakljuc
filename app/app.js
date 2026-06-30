@@ -19,10 +19,27 @@ const NOT_CONFIRMED_ITEMS = [
   'natančne mere strehe',
   'oder ali dvigalo',
   'posebni detajli',
-  'snegolovi',
+  'točne količine snegolovov in zaključkov',
   'točna dolžina žlebov',
   'končna izbira materialov',
   'termin izvedbe',
+];
+
+const OPTIONAL_COMPONENT_LABELS = [
+  ['vaporPermeableMembrane', 'Paroprepustna folija'],
+  ['roofBoarding', 'Deskanje / opaž'],
+  ['roofBattens', 'Strešne letve'],
+  ['counterBattens', 'Kontra letve'],
+  ['ventilationLayer', 'Prezračevalni sloj'],
+  ['ridgeTiles', 'Slemenjaki / sleme'],
+  ['edgeTiles', 'Krajnik / krajna kritina'],
+  ['snowGuards', 'Snegolovi'],
+  ['valleyFlashing', 'Žlota'],
+  ['eavesFlashing', 'Kapna obroba'],
+  ['windBoardFlashing', 'Čelna / vetrna obroba'],
+  ['scaffolding', 'Oder'],
+  ['manualMaterialCarry', 'Ročni prenos materiala'],
+  ['siteSetup', 'Postavitev gradbišča'],
 ];
 
 function readQuoteForm(form) {
@@ -49,6 +66,23 @@ function readQuoteForm(form) {
     wasteHandlingLabel: readSelectedLabel(form, 'wasteHandling'),
     insulation: data.has('insulation'),
     gutters: data.has('gutters'),
+    vaporPermeableMembrane: data.has('vaporPermeableMembrane'),
+    roofBoarding: data.has('roofBoarding'),
+    roofBattens: data.has('roofBattens'),
+    counterBattens: data.has('counterBattens'),
+    ventilationLayer: data.has('ventilationLayer'),
+    ridgeTiles: data.has('ridgeTiles'),
+    edgeTiles: data.has('edgeTiles'),
+    roofVentCount: data.get('roofVentCount'),
+    snowGuards: data.has('snowGuards'),
+    gutterLength: data.get('gutterLength'),
+    downpipeLength: data.get('downpipeLength'),
+    valleyFlashing: data.has('valleyFlashing'),
+    eavesFlashing: data.has('eavesFlashing'),
+    windBoardFlashing: data.has('windBoardFlashing'),
+    scaffolding: data.has('scaffolding'),
+    manualMaterialCarry: data.has('manualMaterialCarry'),
+    siteSetup: data.has('siteSetup'),
   };
 }
 
@@ -159,6 +193,8 @@ function buildEstimateEmailSection() {
 }
 
 function buildSelectedSummary(input) {
+  const selectedComponents = buildSelectedComponentLabels(input);
+  const exactGutterLengths = hasExactGutterLengths(input);
   return [
     { label: 'Površina', value: `${input.area || ''} m²` },
     { label: 'Tip strehe', value: input.roofTypeLabel || input.roofType || '' },
@@ -172,7 +208,8 @@ function buildSelectedSummary(input) {
     { label: 'Odstranitev obstoječe kritine', value: input.existingRoofRemovalLabel || input.existingRoofRemoval || '' },
     { label: 'Odvoz odpadnega materiala', value: input.wasteHandlingLabel || input.wasteHandling || '' },
     { label: 'Toplotna izolacija', value: input.insulation ? 'da' : 'ne' },
-    { label: 'Žlebovi in osnovna kleparska dela', value: input.gutters ? 'da' : 'ne' },
+    { label: 'Žlebovi in osnovna kleparska dela', value: formatBroadGuttersValue(input.gutters, exactGutterLengths) },
+    { label: 'Dodatne postavke strehe', value: selectedComponents.length ? selectedComponents.join(', ') : 'ni izbrano' },
   ];
 }
 
@@ -187,7 +224,8 @@ function buildPriceDrivers(input) {
   addIfSelected(drivers, input.existingRoofRemoval !== 'none', input.existingRoofRemovalLabel || 'odstranitev obstoječe kritine');
   addIfSelected(drivers, input.wasteHandling !== 'none', input.wasteHandlingLabel || 'odvoz odpadnega materiala');
   addIfSelected(drivers, input.insulation, 'toplotna izolacija');
-  addIfSelected(drivers, input.gutters, 'žlebovi in osnovna kleparska dela');
+  addIfSelected(drivers, input.gutters && !hasExactGutterLengths(input), 'žlebovi in osnovna kleparska dela');
+  drivers.push(...buildSelectedComponentLabels(input));
 
   if (drivers.length === 0) {
     drivers.push('osnovna izbira kritine in površina strehe');
@@ -202,8 +240,33 @@ function buildIncludedItems(input) {
   addIfSelected(items, input.existingRoofRemoval !== 'none', input.existingRoofRemovalLabel || 'izbrana odstranitev kritine');
   addIfSelected(items, input.wasteHandling !== 'none', input.wasteHandlingLabel || 'izbrani odvoz odpadnega materiala');
   addIfSelected(items, input.insulation, 'toplotna izolacija');
-  addIfSelected(items, input.gutters, 'žlebovi in osnovna kleparska dela');
+  addIfSelected(items, input.gutters && !hasExactGutterLengths(input), 'žlebovi in osnovna kleparska dela');
+  items.push(...buildSelectedComponentLabels(input));
   return items;
+}
+
+function hasExactGutterLengths(input) {
+  return Number(input.gutterLength) > 0 || Number(input.downpipeLength) > 0;
+}
+
+function formatBroadGuttersValue(selected, exactGutterLengths) {
+  if (!selected) return 'ne';
+  if (exactGutterLengths) return 'preskočeno, ker so vnesene natančne dolžine';
+  return 'da - okvirna ocena';
+}
+
+function buildSelectedComponentLabels(input) {
+  const labels = [];
+
+  for (const [key, label] of OPTIONAL_COMPONENT_LABELS) {
+    addIfSelected(labels, input[key], label);
+  }
+
+  addIfSelected(labels, Number(input.roofVentCount) > 0, formatCountLabel(input.roofVentCount, 'zračnik na strehi', 'zračnika na strehi', 'zračniki na strehi'));
+  addIfSelected(labels, Number(input.gutterLength) > 0, `žleb (${formatDecimal(input.gutterLength)} m)`);
+  addIfSelected(labels, Number(input.downpipeLength) > 0, `vertikalna odtočna cev (${formatDecimal(input.downpipeLength)} m)`);
+
+  return labels;
 }
 
 function addIfSelected(items, condition, value) {
@@ -217,6 +280,11 @@ function formatCountLabel(value, singular, dual, plural) {
   if (count === 1) return `${count} ${singular}`;
   if (count === 2) return `${count} ${dual}`;
   return `${count} ${plural}`;
+}
+
+function formatDecimal(value) {
+  const number = Number(value);
+  return Number.isInteger(number) ? String(number) : number.toFixed(1);
 }
 
 function formatDefinitionLines(items) {
@@ -278,6 +346,15 @@ function validateQuoteInput(input) {
 
   const roofWindowCountError = validateNonNegativeCount(input.roofWindowCount, 'Število strešnih oken', 'roofWindowCount');
   if (roofWindowCountError) return roofWindowCountError;
+
+  const roofVentCountError = validateNonNegativeCount(input.roofVentCount, 'Število zračnikov na strehi', 'roofVentCount');
+  if (roofVentCountError) return roofVentCountError;
+
+  const gutterLengthError = validateNonNegativeLength(input.gutterLength, 'Dolžina žleba', 'gutterLength');
+  if (gutterLengthError) return gutterLengthError;
+
+  const downpipeLengthError = validateNonNegativeLength(input.downpipeLength, 'Dolžina vertikalne odtočne cevi', 'downpipeLength');
+  if (downpipeLengthError) return downpipeLengthError;
 
   return null;
 }
@@ -349,6 +426,22 @@ function validateNonNegativeCount(value, label, field) {
     return {
       field,
       message: `${label} mora biti celo število 0 ali več.`,
+    };
+  }
+
+  return null;
+}
+
+function validateNonNegativeLength(value, label, field) {
+  if (value === null || value === undefined || value === '') {
+    return null;
+  }
+
+  const length = Number(value);
+  if (!Number.isFinite(length) || length < 0) {
+    return {
+      field,
+      message: `${label} mora biti število 0 ali več.`,
     };
   }
 

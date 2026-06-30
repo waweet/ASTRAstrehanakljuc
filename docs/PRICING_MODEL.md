@@ -22,6 +22,10 @@ dodatki =
   + dimniki
   + strešna okna
   + odvoz odpadnega materiala
+  + izbrani sloji strehe
+  + izbrani zaključki kritine
+  + izbrana kleparska dela
+  + izbrani dodatki za dostop in pripravo
 
 vmesni seštevek = osnovna izvedba + dodatki
 
@@ -94,6 +98,41 @@ Pregledne postavke se lahko premaknejo v konfiguracijo šele po potrditvi ASTRA 
 - Strešna okna,
 - Odvoz odpadnega materiala.
 
+### PR-006 aktivirane dodatne postavke
+
+PR-006 premakne majhen del PR-005 kataloga v aktivni kalkulator. Runtime vrednosti so v `src/pricing-config.js`, logika pa v `src/pricing-engine.js`.
+
+Aktivirani sloji strehe:
+
+- Paroprepustna folija,
+- Deskanje / opaž,
+- Strešne letve,
+- Kontra letve,
+- Prezračevalni sloj.
+
+Aktivirani zaključki kritine:
+
+- Slemenjaki / sleme,
+- Krajnik / krajna kritina,
+- Zračniki na strehi,
+- Snegolovi.
+
+Aktivirana kleparska dela:
+
+- Žleb,
+- Vertikalna odtočna cev,
+- Žlota,
+- Kapna obroba,
+- Čelna / vetrna obroba.
+
+Aktivirani dodatki za dostop in pripravo:
+
+- Oder,
+- Ročni prenos materiala,
+- Postavitev gradbišča.
+
+Postavke z znano dolžino, kot sta žleb in vertikalna odtočna cev, uporabljajo uporabnikov vnos v m¹. Nekatere checkbox postavke z enoto m¹ ali m² uporabljajo konfigurirane privzete dovolilnice, ker MVP ne zbira vseh natančnih mer. Te dovolilnice ostajajo informativne predpostavke in zahtevajo ASTRA potrditev pred produkcijo.
+
 ### Faktorji
 
 - Zahtevnost oblike,
@@ -147,7 +186,7 @@ Odvoz je modeliran kot znesek na m², ker se količina materiala običajno pove�
 
 ## Omejitve modela
 
-Model še vedno ne predstavlja končne ponudbe. Ne vključuje vseh možnih postavk, kot so oder, dvigalo, snegolovi, dolžina žlebov v m¹, regijski faktorji, dejansko stanje konstrukcije ali posebni detajli na objektu.
+Model še vedno ne predstavlja končne ponudbe. Ne vključuje vseh možnih postavk, kot so dvigalo, regijski faktorji, dejansko stanje konstrukcije ali posebni detajli na objektu. Nekatere nove PR-006 postavke so še vedno poenostavljene z dovolilnicami in niso nadomestilo za ogled ali natančne izmere.
 
 Pred produkcijsko uporabo je treba:
 
@@ -158,12 +197,13 @@ Pred produkcijsko uporabo je treba:
 
 ## Priporočena nadgradnja
 
-V naslednji fazi naj pricing model podpira:
+V naslednji fazi naj pricing model bolj natančno podpira:
 
-- snegolove,
-- dolžino žlebov v m¹,
-- oder,
+- natančne količine snegolovov,
+- natančne dolžine vseh kleparskih obrob,
+- oder po dejanski površini,
 - regijski faktor,
 - ločen prikaz material / delo / dodatki.
 
 PR-005 dodaja katalog cenovnih predpostavk za pregled, ne spreminja pa aktivnega izračuna.
+PR-006 aktivira izbran podsklop kataloga, vendar rezultat ostaja informativen in nezavezujoč.

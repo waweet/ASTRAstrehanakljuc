@@ -204,6 +204,149 @@ test('rejects negative roof window count', () => {
   }, /Število strešnih oken mora biti celo število 0 ali več/);
 });
 
+test('selecting paroprepustna folija increases the estimate', () => {
+  const base = calculateRoofQuote(baseExpandedInput());
+  const withMembrane = calculateRoofQuote({
+    ...baseExpandedInput(),
+    vaporPermeableMembrane: true,
+  });
+
+  assert.ok(withMembrane.low > base.low);
+  assert.ok(withMembrane.high > base.high);
+  assert.ok(withMembrane.breakdown.some((item) => item.label.includes('Paroprepustna folija')));
+});
+
+test('selecting deskanje increases the estimate', () => {
+  const base = calculateRoofQuote(baseExpandedInput());
+  const withBoarding = calculateRoofQuote({
+    ...baseExpandedInput(),
+    roofBoarding: true,
+  });
+
+  assert.ok(withBoarding.low > base.low);
+  assert.ok(withBoarding.high > base.high);
+  assert.ok(withBoarding.breakdown.some((item) => item.label.includes('Deskanje')));
+});
+
+test('selecting roof battens and counter battens increases the estimate', () => {
+  const base = calculateRoofQuote(baseExpandedInput());
+  const withBattens = calculateRoofQuote({
+    ...baseExpandedInput(),
+    roofBattens: true,
+    counterBattens: true,
+  });
+
+  assert.ok(withBattens.low > base.low);
+  assert.ok(withBattens.high > base.high);
+  assert.ok(withBattens.breakdown.some((item) => item.label.includes('Strešne letve')));
+  assert.ok(withBattens.breakdown.some((item) => item.label.includes('Kontra letve')));
+});
+
+test('selecting ventilation layer increases the estimate', () => {
+  const base = calculateRoofQuote(baseExpandedInput());
+  const withVentilation = calculateRoofQuote({
+    ...baseExpandedInput(),
+    ventilationLayer: true,
+  });
+
+  assert.ok(withVentilation.low > base.low);
+  assert.ok(withVentilation.high > base.high);
+  assert.ok(withVentilation.breakdown.some((item) => item.label.includes('Prezračevalni sloj')));
+});
+
+test('selecting sheet-metal items increases the estimate', () => {
+  const base = calculateRoofQuote(baseExpandedInput());
+  const withSheetMetal = calculateRoofQuote({
+    ...baseExpandedInput(),
+    gutterLength: 24,
+    downpipeLength: 12,
+    valleyFlashing: true,
+  });
+
+  assert.ok(withSheetMetal.low > base.low);
+  assert.ok(withSheetMetal.high > base.high);
+  assert.ok(withSheetMetal.breakdown.some((item) => item.label.includes('Žleb')));
+  assert.ok(withSheetMetal.breakdown.some((item) => item.label.includes('Vertikalna odtočna cev')));
+  assert.ok(withSheetMetal.breakdown.some((item) => item.label.includes('Žlota')));
+});
+
+test('broad gutters addon increases estimate when exact lengths are not provided', () => {
+  const base = calculateRoofQuote(baseExpandedInput());
+  const withBroadGutters = calculateRoofQuote({
+    ...baseExpandedInput(),
+    gutters: true,
+  });
+
+  assert.ok(withBroadGutters.low > base.low);
+  assert.ok(withBroadGutters.high > base.high);
+  assert.ok(withBroadGutters.breakdown.some((item) => item.label === 'Žlebovi in osnovna kleparska dela'));
+});
+
+test('exact gutter and downpipe lengths increase estimate separately', () => {
+  const base = calculateRoofQuote(baseExpandedInput());
+  const withGutterLength = calculateRoofQuote({
+    ...baseExpandedInput(),
+    gutterLength: 24,
+  });
+  const withDownpipeLength = calculateRoofQuote({
+    ...baseExpandedInput(),
+    downpipeLength: 12,
+  });
+
+  assert.ok(withGutterLength.low > base.low);
+  assert.ok(withDownpipeLength.low > base.low);
+  assert.ok(withGutterLength.breakdown.some((item) => item.label.includes('Žleb (24 m)')));
+  assert.ok(withDownpipeLength.breakdown.some((item) => item.label.includes('Vertikalna odtočna cev (12 m)')));
+});
+
+test('exact gutter lengths prevent broad gutters double counting', () => {
+  const result = calculateRoofQuote({
+    ...baseExpandedInput(),
+    gutters: true,
+    gutterLength: 24,
+    downpipeLength: 12,
+  });
+
+  assert.ok(result.breakdown.some((item) => item.label.includes('Žleb (24 m)')));
+  assert.ok(result.breakdown.some((item) => item.label.includes('Vertikalna odtočna cev (12 m)')));
+  assert.equal(result.breakdown.some((item) => item.label === 'Žlebovi in osnovna kleparska dela'), false);
+});
+
+test('selecting site setup increases the estimate', () => {
+  const base = calculateRoofQuote(baseExpandedInput());
+  const withSiteSetup = calculateRoofQuote({
+    ...baseExpandedInput(),
+    siteSetup: true,
+  });
+
+  assert.ok(withSiteSetup.low > base.low);
+  assert.ok(withSiteSetup.high > base.high);
+  assert.ok(withSiteSetup.breakdown.some((item) => item.label.includes('Postavitev gradbišča')));
+});
+
+test('rejects negative active component counts and lengths', () => {
+  assert.throws(() => {
+    calculateRoofQuote({
+      ...baseExpandedInput(),
+      roofVentCount: -1,
+    });
+  }, /Število zračnikov na strehi mora biti celo število 0 ali več/);
+
+  assert.throws(() => {
+    calculateRoofQuote({
+      ...baseExpandedInput(),
+      gutterLength: -0.5,
+    });
+  }, /Dolžina žleba mora biti število 0 ali več/);
+
+  assert.throws(() => {
+    calculateRoofQuote({
+      ...baseExpandedInput(),
+      downpipeLength: -1,
+    });
+  }, /Dolžina vertikalne odtočne cevi mora biti število 0 ali več/);
+});
+
 test('formats currency for Slovenian locale', () => {
   assert.equal(formatCurrency(12500), '12.500 €');
 });
