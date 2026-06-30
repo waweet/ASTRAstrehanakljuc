@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="sl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ASTRA Streha na ključ</title>
+    <meta
+      name="description"
+      content="Informativni izračun za streho na ključ in hitro povpraševanje za ASTRA group d.o.o."
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="brand">ASTRA group d.o.o.</div>
+      <a href="#povprasevanje" class="header-cta">Pošlji povpraševanje</a>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Streha na ključ</p>
+          <h1>Okvirna cena strehe v nekaj minutah.</h1>
+          <p class="lead">
+            Vnesi osnovne podatke o strehi in prejmi informativni cenovni razpon.
+            Za natančno ponudbo pošlji še fotografije, lokacijo in kontakt.
+          </p>
+          <div class="hero-actions">
+            <a href="#kalkulator" class="button primary">Izračunaj ceno</a>
+            <a href="#kako-deluje" class="button secondary">Kako deluje</a>
+          </div>
+        </div>
+        <div class="hero-card" aria-label="Povzetek storitev">
+          <span>Kritina</span>
+          <span>Izolacija</span>
+          <span>Kleparska dela</span>
+          <span>Odvoz materiala</span>
+          <strong>Informativna ponudba</strong>
+        </div>
+      </section>
+
+      <section id="kako-deluje" class="section three-cols">
+        <article>
+          <h2>1. Vnos</h2>
+          <p>Površina, tip strehe, kritina, dostopnost in dodatna dela.</p>
+        </article>
+        <article>
+          <h2>2. Ocena</h2>
+          <p>Aplikacija izračuna okvirni razpon, ne dokončne ponudbe.</p>
+        </article>
+        <article>
+          <h2>3. Povpraševanje</h2>
+          <p>Stranka pošlje kontakt in opis, ASTRA pripravi konkreten odziv.</p>
+        </article>
+      </section>
+
+      <section id="kalkulator" class="section calculator-layout">
+        <form id="quote-form" class="panel">
+          <p class="eyebrow">Kalkulator</p>
+          <h2>Informativni izračun</h2>
+
+          <label>
+            Površina strehe v m²
+            <input name="area" type="number" min="20" max="1000" value="180" required />
+          </label>
+
+          <label>
+            Tip strehe
+            <select name="roofType">
+              <option value="dvokapnica">Dvokapnica</option>
+              <option value="enokapnica">Enokapnica</option>
+              <option value="ravna">Ravna streha</option>
+              <option value="kompleksna">Kompleksna streha</option>
+            </select>
+          </label>
+
+          <label>
+            Kritina / sistem
+            <select name="covering">
+              <option value="clay_tiles">Opečna kritina</option>
+              <option value="concrete_tiles">Betonska kritina</option>
+              <option value="metal_sheet">Pločevinasta kritina</option>
+              <option value="flat_membrane">Ravna streha - membrana</option>
+            </select>
+          </label>
+
+          <label>
+            Zahtevnost oblike
+            <select name="complexity">
+              <option value="simple">Enostavna</option>
+              <option value="medium">Srednje zahtevna</option>
+              <option value="complex">Zahtevna</option>
+            </select>
+          </label>
+
+          <label>
+            Dostopnost objekta
+            <select name="access">
+              <option value="normal">Normalna</option>
+              <option value="difficult">Zahtevna</option>
+              <option value="very_difficult">Zelo zahtevna</option>
+            </select>
+          </label>
+
+          <fieldset>
+            <legend>Dodatna dela</legend>
+            <label class="check"><input name="tearOff" type="checkbox" checked /> Odstranitev stare kritine</label>
+            <label class="check"><input name="insulation" type="checkbox" /> Toplotna izolacija</label>
+            <label class="check"><input name="gutters" type="checkbox" checked /> Žlebovi in osnovna kleparska dela</label>
+          </fieldset>
+
+          <button class="button primary" type="submit">Izračunaj</button>
+        </form>
+
+        <aside class="panel result-panel" aria-live="polite">
+          <p class="eyebrow">Rezultat</p>
+          <h2 id="price-range">Vnesi podatke</h2>
+          <p id="price-note">
+            Rezultat je informativen. Končna ponudba je možna po ogledu, pregledu slik in preverbi izvedbenih pogojev.
+          </p>
+          <dl id="breakdown"></dl>
+          <a href="#povprasevanje" class="button secondary full">Želim konkretno ponudbo</a>
+        </aside>
+      </section>
+
+      <section id="povprasevanje" class="section lead-section">
+        <div>
+          <p class="eyebrow">Povpraševanje</p>
+          <h2>Pošlji osnovne podatke za natančnejši odziv.</h2>
+          <p>
+            V naslednji fazi bo obrazec povezan z emailom ali CRM sistemom. V tem prototipu se pripravi osnutek emaila.
+          </p>
+        </div>
+        <form id="lead-form" class="panel">
+          <label>
+            Ime in priimek
+            <input name="name" type="text" placeholder="Janez Novak" required />
+          </label>
+          <label>
+            Telefon
+            <input name="phone" type="tel" placeholder="040 000 000" required />
+          </label>
+          <label>
+            Email
+            <input name="email" type="email" placeholder="ime@email.si" />
+          </label>
+          <label>
+            Lokacija objekta
+            <input name="location" type="text" placeholder="Koper, Izola, Ljubljana ..." />
+          </label>
+          <label>
+            Kratek opis
+            <textarea name="message" rows="5" placeholder="Npr. menjava kritine, izolacija, žlebovi, težji dostop ..."></textarea>
+          </label>
+          <button class="button primary" type="submit">Pripravi email</button>
+          <p class="small">S klikom se odpre osnutek emaila. V produkciji naj bo dodana GDPR privolitev.</p>
+        </form>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>ASTRA group d.o.o.</span>
+      <span>Informativni kalkulator - ni zavezujoča ponudba.</span>
+    </footer>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
