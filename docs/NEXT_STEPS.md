@@ -110,6 +110,24 @@ Po MVP testiranju je naslednji priporočeni PR odvisen od povratnih informacij:
 - backend/lead delivery, če je `mailto:` preveč nezanesljiv,
 - pricing refinement, če ASTRA ugotovi, da so razponi zavajajoči za tipične primere.
 
+## PR-008 - Inquiry flow and visual polish
+
+Izvedeno v PR-008:
+
+- statični `mailto:` tok povpraševanja ima zdaj viden fallback panel,
+- fallback panel prikaže ASTRA e-naslov, zadevo in pripravljeno besedilo povpraševanja,
+- dodan je gumb za kopiranje pripravljenega povpraševanja,
+- besedilo jasno pove, da aplikacija pripravi osnutek e-pošte in ne pošilja iz strežnika,
+- glavna predstavitev jasneje uporablja ime `ASTRA Streha na ključ`,
+- kontaktni razdelek, rezultat in dolgi obrazec so vizualno bolj berljivi na namizju in mobilnih širinah.
+
+Omejitve po PR-007:
+
+- backend pošiljanje e-pošte ni dodano,
+- CRM integracija ni dodana,
+- aplikacija je bolj pripravljena za omejeno MVP testiranje, vendar še ni produkcijsko finalna,
+- če se `mailto:` v realnih testih izkaže za nezanesljiv, je naslednji korak backend ali druga potrjena dostavna pot za povpraševanja.
+
 ## Kasnejši produkcijski tok
 
 - odločitev o backendu, email pošiljanju ali CRM povezavi,

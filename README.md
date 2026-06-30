@@ -13,8 +13,13 @@ Trenutno stanje:
 - statična aplikacija brez backenda,
 - informativni kalkulator z ASTRA-potrjenimi MVP testnimi vrednostmi,
 - nezavezujoč cenovni razpon,
-- `mailto:` tok za povpraševanje,
+- statični `mailto:` tok za povpraševanje s copy fallbackom,
+- viden fallback panel z ASTRA e-naslovom, zadevo in pripravljenim besedilom,
 - brez produkcijsko-finalnega pravnega/GDPR pregleda.
+
+Povpraševanje se v trenutni različici ne pošilja iz backend strežnika. Aplikacija pripravi
+osnutek e-pošte in prikaže kopirljivo fallback besedilo, če uporabnikova naprava nima
+nastavljenega e-poštnega programa.
 
 ## Lokalni zagon
 

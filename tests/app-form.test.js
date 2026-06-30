@@ -5,6 +5,12 @@ import { test } from 'node:test';
 
 test('lead form blocks missing consent and includes the latest estimate when consent is present', async () => {
   const html = readFileSync(new URL('../app/index.html', import.meta.url), 'utf8');
+  assert.match(html, /<title>ASTRA Streha na ključ<\/title>/);
+  assert.match(html, /ASTRA Streha na ključ/);
+  assert.match(html, /<h1>Streha na ključ<\/h1>/);
+  assert.match(html, /Informativni izračun za novo ali obnovljeno streho/);
+  assert.match(html, /Pošlji povpraševanje/);
+  assert.match(html, /Informativni izračun\s+ni zavezujoča ponudba/);
   assert.match(html, /name="roofPitch"/);
   assert.match(html, /name="chimneyCount"/);
   assert.match(html, /name="roofWindowCount"/);
@@ -28,6 +34,13 @@ test('lead form blocks missing consent and includes the latest estimate when con
     notConfirmed,
     quoteError,
     leadError,
+    inquiryFallback,
+    inquiryEmail,
+    inquirySubject,
+    inquiryBody,
+    inquiryMailtoLink,
+    copyInquiryButton,
+    copyStatus,
     windowLocation,
   } = setupDom();
   const appUrl = pathToFileURL(new URL('../app/app.js', import.meta.url).pathname);
@@ -125,6 +138,7 @@ test('lead form blocks missing consent and includes the latest estimate when con
   assert.equal(leadError.hidden, false);
   assert.match(leadError.textContent, /potrdi/);
   assert.equal(windowLocation.href, '');
+  assert.equal(inquiryFallback.hidden, true);
 
   leadForm.setChecked('consent', true);
   leadForm.submit();
@@ -132,6 +146,12 @@ test('lead form blocks missing consent and includes the latest estimate when con
   const subject = decodeURIComponent(windowLocation.href.split('subject=')[1].split('&body=')[0]);
   const body = decodeURIComponent(windowLocation.href.split('body=')[1]);
   assert.match(windowLocation.href, /^mailto:info@astragroup\.si/);
+  assert.equal(inquiryFallback.hidden, false);
+  assert.equal(inquiryEmail.textContent, 'info@astragroup.si');
+  assert.equal(inquirySubject.textContent, subject);
+  assert.equal(inquiryBody.value, body);
+  assert.equal(inquiryMailtoLink.href, windowLocation.href);
+  assert.equal(copyInquiryButton.textContent, 'Kopiraj povpraševanje');
   assert.match(subject, /Povpraševanje za streho na ključ - informativni izračun/);
   assert.match(subject, /Test Stranka/);
   assert.match(subject, /Ljubljana/);
@@ -164,6 +184,10 @@ test('lead form blocks missing consent and includes the latest estimate when con
   assert.match(body, /Soglasje\n---/);
   assert.match(body, /Opomba o informativnosti\n---/);
   assert.match(body, /Za natančno ponudbo je potreben pregled podatkov/);
+
+  await copyInquiryButton.click();
+  assert.equal(globalThis.navigator.clipboard.lastCopiedText, body);
+  assert.match(copyStatus.textContent, /kopirano/i);
 });
 
 function setupDom() {
@@ -312,8 +336,17 @@ function setupDom() {
   const notConfirmed = createNode();
   const quoteError = createNode();
   const leadError = createNode();
+  const inquiryFallback = createNode();
+  const inquiryEmail = createNode();
+  const inquirySubject = createNode();
+  const inquiryBody = createNode();
+  const inquiryMailtoLink = createNode();
+  const copyInquiryButton = createNode();
+  const copyStatus = createNode();
   quoteError.hidden = true;
   leadError.hidden = true;
+  inquiryFallback.hidden = true;
+  copyInquiryButton.textContent = 'Kopiraj povpraševanje';
 
   const selectors = new Map([
     ['#quote-form', quoteForm],
@@ -327,6 +360,13 @@ function setupDom() {
     ['#not-confirmed', notConfirmed],
     ['#quote-error', quoteError],
     ['#lead-error', leadError],
+    ['#inquiry-fallback', inquiryFallback],
+    ['#inquiry-email', inquiryEmail],
+    ['#inquiry-subject', inquirySubject],
+    ['#inquiry-body', inquiryBody],
+    ['#inquiry-mailto-link', inquiryMailtoLink],
+    ['#copy-inquiry', copyInquiryButton],
+    ['#copy-status', copyStatus],
   ]);
 
   globalThis.document = {
@@ -340,6 +380,18 @@ function setupDom() {
 
   const windowLocation = { href: '' };
   globalThis.window = { location: windowLocation };
+  const clipboard = {
+    lastCopiedText: '',
+    async writeText(text) {
+      this.lastCopiedText = text;
+    },
+  };
+  Object.defineProperty(globalThis, 'navigator', {
+    configurable: true,
+    value: {
+      clipboard,
+    },
+  });
 
   return {
     quoteForm,
@@ -352,6 +404,13 @@ function setupDom() {
     notConfirmed,
     quoteError,
     leadError,
+    inquiryFallback,
+    inquiryEmail,
+    inquirySubject,
+    inquiryBody,
+    inquiryMailtoLink,
+    copyInquiryButton,
+    copyStatus,
     windowLocation,
   };
 }
@@ -360,11 +419,22 @@ function createNode() {
   return {
     textContent: '',
     innerHTML: '',
+    value: '',
+    href: '',
     hidden: false,
     children: [],
+    listeners: new Map(),
     append(...nodes) {
       this.children.push(...nodes);
     },
+    addEventListener(type, listener) {
+      this.listeners.set(type, listener);
+    },
+    click() {
+      return this.listeners.get('click')?.({ preventDefault() {} });
+    },
+    focus() {},
+    select() {},
   };
 }
 
@@ -375,6 +445,7 @@ function hasRenderedText(node, pattern) {
 function collectText(node) {
   return [
     node.textContent,
+    node.value,
     ...node.children.flatMap((child) => collectText(child)),
   ].join(' ');
 }

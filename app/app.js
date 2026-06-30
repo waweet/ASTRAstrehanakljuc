@@ -11,8 +11,17 @@ const includedItems = document.querySelector('#included-items');
 const notConfirmed = document.querySelector('#not-confirmed');
 const quoteError = document.querySelector('#quote-error');
 const leadError = document.querySelector('#lead-error');
+const inquiryFallback = document.querySelector('#inquiry-fallback');
+const inquiryEmail = document.querySelector('#inquiry-email');
+const inquirySubject = document.querySelector('#inquiry-subject');
+const inquiryBody = document.querySelector('#inquiry-body');
+const inquiryMailtoLink = document.querySelector('#inquiry-mailto-link');
+const copyInquiryButton = document.querySelector('#copy-inquiry');
+const copyStatus = document.querySelector('#copy-status');
 let latestQuote = null;
 let latestQuoteInput = null;
+
+const ASTRA_EMAIL = 'info@astragroup.si';
 
 const NOT_CONFIRMED_ITEMS = [
   'dejansko stanje konstrukcije',
@@ -308,6 +317,86 @@ function buildInquirySubject(data) {
   return parts.join(' - ');
 }
 
+function buildInquiryBody(data) {
+  return [
+    'Pozdravljeni,',
+    '',
+    'prosim za pregled podatkov za streho na ključ.',
+    '',
+    'Kontakt',
+    '---',
+    `Ime: ${readString(data, 'name')}`,
+    `Telefon: ${readString(data, 'phone')}`,
+    `Email: ${readString(data, 'email')}`,
+    '',
+    'Lokacija / objekt',
+    '---',
+    `Lokacija: ${readString(data, 'location')}`,
+    '',
+    'Opis strehe',
+    '---',
+    `${readString(data, 'message')}`,
+    '',
+    ...buildEstimateEmailSection(),
+    '',
+    'Izbrani podatki kalkulatorja',
+    '---',
+    ...formatDefinitionLines(buildSelectedSummary(latestQuoteInput || readQuoteForm(quoteForm))),
+    '',
+    'Dejavniki, ki vplivajo na oceno',
+    '---',
+    ...formatBulletLines(buildPriceDrivers(latestQuoteInput || readQuoteForm(quoteForm))),
+    '',
+    'Kaj še ni potrjeno',
+    '---',
+    ...formatBulletLines(NOT_CONFIRMED_ITEMS),
+    '',
+    'Soglasje',
+    '---',
+    'Stranka je potrdila, da lahko ASTRA group d.o.o. uporabi poslane podatke za odgovor na povpraševanje.',
+    '',
+    'Opomba o informativnosti',
+    '---',
+    'Informativni razpon ni zavezujoča ponudba. Za natančno ponudbo je potreben pregled podatkov, slik in izvedbenih pogojev.',
+    '',
+    'Lep pozdrav',
+  ].join('\n');
+}
+
+function buildMailtoUrl(subject, body) {
+  return `mailto:${ASTRA_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
+function renderInquiryFallback(subject, body, mailtoUrl) {
+  if (!inquiryFallback) return;
+
+  inquiryFallback.hidden = false;
+  if (inquiryEmail) inquiryEmail.textContent = ASTRA_EMAIL;
+  if (inquirySubject) inquirySubject.textContent = subject;
+  if (inquiryBody) inquiryBody.value = body;
+  if (inquiryMailtoLink) inquiryMailtoLink.href = mailtoUrl;
+  if (copyStatus) copyStatus.textContent = '';
+}
+
+async function copyInquiryBody() {
+  if (!inquiryBody || !copyStatus) return;
+
+  const text = inquiryBody.value;
+
+  try {
+    if (!navigator.clipboard?.writeText) {
+      throw new Error('Clipboard API is not available.');
+    }
+
+    await navigator.clipboard.writeText(text);
+    copyStatus.textContent = 'Povpraševanje je kopirano.';
+  } catch {
+    inquiryBody.focus?.();
+    inquiryBody.select?.();
+    copyStatus.textContent = 'Kopiranje ni samodejno uspelo. Označeno besedilo lahko kopirate ročno.';
+  }
+}
+
 function validateQuoteInput(input) {
   if (!String(input.area || '').trim()) {
     return {
@@ -484,52 +573,16 @@ leadForm.addEventListener('submit', (event) => {
   }
 
   hideError(leadError);
-  const subject = encodeURIComponent(buildInquirySubject(data));
-  const body = encodeURIComponent([
-    'Pozdravljeni,',
-    '',
-    'prosim za pregled podatkov za streho na ključ.',
-    '',
-    'Kontakt',
-    '---',
-    `Ime: ${readString(data, 'name')}`,
-    `Telefon: ${readString(data, 'phone')}`,
-    `Email: ${readString(data, 'email')}`,
-    '',
-    'Lokacija / objekt',
-    '---',
-    `Lokacija: ${readString(data, 'location')}`,
-    '',
-    'Opis strehe',
-    '---',
-    `${readString(data, 'message')}`,
-    '',
-    ...buildEstimateEmailSection(),
-    '',
-    'Izbrani podatki kalkulatorja',
-    '---',
-    ...formatDefinitionLines(buildSelectedSummary(latestQuoteInput || readQuoteForm(quoteForm))),
-    '',
-    'Dejavniki, ki vplivajo na oceno',
-    '---',
-    ...formatBulletLines(buildPriceDrivers(latestQuoteInput || readQuoteForm(quoteForm))),
-    '',
-    'Kaj še ni potrjeno',
-    '---',
-    ...formatBulletLines(NOT_CONFIRMED_ITEMS),
-    '',
-    'Soglasje',
-    '---',
-    'Stranka je potrdila, da lahko ASTRA group d.o.o. uporabi poslane podatke za odgovor na povpraševanje.',
-    '',
-    'Opomba o informativnosti',
-    '---',
-    'Informativni razpon ni zavezujoča ponudba. Za natančno ponudbo je potreben pregled podatkov, slik in izvedbenih pogojev.',
-    '',
-    'Lep pozdrav',
-  ].join('\n'));
+  const subject = buildInquirySubject(data);
+  const body = buildInquiryBody(data);
+  const mailtoUrl = buildMailtoUrl(subject, body);
 
-  window.location.href = `mailto:info@astragroup.si?subject=${subject}&body=${body}`;
+  renderInquiryFallback(subject, body, mailtoUrl);
+  window.location.href = mailtoUrl;
+});
+
+copyInquiryButton?.addEventListener('click', () => {
+  copyInquiryBody();
 });
 
 try {

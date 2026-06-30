@@ -12,22 +12,26 @@
   </head>
   <body>
     <header class="site-header">
-      <div class="brand">ASTRA group d.o.o.</div>
+      <div class="brand">
+        <span>ASTRA group d.o.o.</span>
+        <strong>ASTRA Streha na ključ</strong>
+      </div>
       <a href="#povprasevanje" class="header-cta">Pošlji povpraševanje</a>
     </header>
 
     <main>
       <section class="hero">
         <div class="hero-copy">
-          <p class="eyebrow">Streha na ključ</p>
-          <h1>Okvirna cena strehe v nekaj minutah.</h1>
+          <p class="eyebrow">ASTRA group d.o.o.</p>
+          <h1>Streha na ključ</h1>
+          <p class="hero-subtitle">Informativni izračun za novo ali obnovljeno streho</p>
           <p class="lead">
-            Vnesi osnovne podatke o strehi in prejmi informativni cenovni razpon.
-            Za natančno ponudbo pošlji še fotografije, lokacijo in kontakt.
+            Vnesite osnovne podatke in prejmite okvirni razpon cene. Za natančno ponudbo
+            je potreben pregled podatkov, slik in izvedbenih pogojev.
           </p>
           <div class="hero-actions">
             <a href="#kalkulator" class="button primary">Izračunaj ceno</a>
-            <a href="#kako-deluje" class="button secondary">Kako deluje</a>
+            <a href="#povprasevanje" class="button secondary">Pošlji povpraševanje</a>
           </div>
         </div>
         <div class="hero-card" aria-label="Povzetek storitev">
@@ -61,6 +65,9 @@
 
           <div id="quote-error" class="form-error" role="alert" hidden></div>
 
+          <fieldset>
+            <legend>Osnovni podatki strehe</legend>
+
           <div class="field">
             <label for="area">Površina strehe v m² <span class="required">(obvezno)</span></label>
             <input id="area" name="area" type="number" min="20" max="1000" value="180" required aria-describedby="area-help" />
@@ -87,26 +94,28 @@
             </select>
           </div>
 
-          <div class="field">
-            <label for="complexity">Zahtevnost oblike <span class="required">(obvezno)</span></label>
-            <select id="complexity" name="complexity" required>
-              <option value="simple">Enostavna</option>
-              <option value="medium">Srednje zahtevna</option>
-              <option value="complex">Zahtevna</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="access">Dostopnost objekta <span class="required">(obvezno)</span></label>
-            <select id="access" name="access" required>
-              <option value="normal">Normalna</option>
-              <option value="difficult">Zahtevna</option>
-              <option value="very_difficult">Zelo zahtevna</option>
-            </select>
-          </div>
+          </fieldset>
 
           <fieldset>
-            <legend>Detajli strehe</legend>
+            <legend>Zahtevnost in dostop</legend>
+
+            <div class="field">
+              <label for="complexity">Zahtevnost oblike <span class="required">(obvezno)</span></label>
+              <select id="complexity" name="complexity" required>
+                <option value="simple">Enostavna</option>
+                <option value="medium">Srednje zahtevna</option>
+                <option value="complex">Zahtevna</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="access">Dostopnost objekta <span class="required">(obvezno)</span></label>
+              <select id="access" name="access" required>
+                <option value="normal">Normalna</option>
+                <option value="difficult">Zahtevna</option>
+                <option value="very_difficult">Zelo zahtevna</option>
+              </select>
+            </div>
 
             <div class="field">
               <label for="roofPitch">Naklon strehe <span class="required">(obvezno)</span></label>
@@ -156,13 +165,13 @@
           </fieldset>
 
           <fieldset>
-            <legend>Dodatna dela</legend>
+            <legend>Dodatki in sloji strehe</legend>
             <label class="check"><input name="insulation" type="checkbox" /> Toplotna izolacija</label>
             <label class="check"><input name="gutters" type="checkbox" checked /> Žlebovi in osnovna kleparska dela - okvirno, če natančne dolžine niso znane</label>
           </fieldset>
 
           <fieldset class="expanded-addons">
-            <legend>Dodatne postavke strehe</legend>
+            <legend>Kleparska dela, dostop in priprava</legend>
 
             <div class="addon-group">
               <h3>Sloji strehe</h3>
@@ -245,12 +254,18 @@
       <section id="povprasevanje" class="section lead-section">
         <div>
           <p class="eyebrow">Povpraševanje</p>
-          <h2>Pošlji osnovne podatke za natančnejši odziv.</h2>
+          <h2>Pošlji povpraševanje</h2>
           <p>
-            V naslednji fazi bo obrazec povezan z emailom ali CRM sistemom. V tem prototipu se pripravi osnutek emaila.
+            Po izračunu lahko podatke pošljete za natančnejši pregled. Informativni izračun
+            ni zavezujoča ponudba.
+          </p>
+          <p>
+            Aplikacija pripravi osnutek e-pošte. Če se e-poštni program ne odpre, lahko
+            pripravljeno besedilo kopirate ročno.
           </p>
         </div>
         <form id="lead-form" class="panel" novalidate>
+          <h3>Kontakt za povpraševanje</h3>
           <div id="lead-error" class="form-error" role="alert" hidden></div>
 
           <div class="field">
@@ -284,9 +299,41 @@
             <span>Strinjam se, da ASTRA group d.o.o. uporabi poslane podatke za odgovor na moje povpraševanje.</span>
           </label>
 
-          <button class="button primary" type="submit">Pripravi email povpraševanja</button>
-          <p class="small">S klikom se odpre osnutek emaila. Podatki se brez tvoje potrditve emaila ne pošljejo samodejno.</p>
+          <button class="button primary" type="submit">Pošlji povpraševanje</button>
+          <p class="small">S klikom se pripravi osnutek emaila. Podatki se brez tvoje potrditve emaila ne pošljejo samodejno.</p>
         </form>
+
+        <section id="inquiry-fallback" class="panel inquiry-fallback" aria-live="polite" hidden>
+          <p class="eyebrow">Povpraševanje je pripravljeno</p>
+          <h3>Odprite e-poštni program ali kopirajte besedilo</h3>
+          <p>
+            Če se e-poštni program ni odprl, kopirajte spodnje povpraševanje in ga pošljite
+            na prikazan e-naslov.
+          </p>
+          <p class="small">Nekateri brskalniki in naprave zahtevajo nastavljen e-poštni program za odpiranje osnutka.</p>
+
+          <dl class="inquiry-meta">
+            <div>
+              <dt>Naslovnik</dt>
+              <dd id="inquiry-email"></dd>
+            </div>
+            <div>
+              <dt>Zadeva</dt>
+              <dd id="inquiry-subject"></dd>
+            </div>
+          </dl>
+
+          <div class="field">
+            <label for="inquiry-body">Besedilo povpraševanja</label>
+            <textarea id="inquiry-body" rows="14" readonly></textarea>
+          </div>
+
+          <div class="fallback-actions">
+            <a id="inquiry-mailto-link" class="button secondary" href="#">Odpri e-pošto znova</a>
+            <button id="copy-inquiry" class="button primary" type="button">Kopiraj povpraševanje</button>
+          </div>
+          <p id="copy-status" class="copy-status" role="status"></p>
+        </section>
       </section>
     </main>
 
