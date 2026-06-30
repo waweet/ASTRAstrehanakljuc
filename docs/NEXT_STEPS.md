@@ -22,9 +22,23 @@ Pred produkcijo še manjka:
 
 ## PR-003 - Razširitev pricing modela
 
-- dodati parametre za naklon, dimnike, strešna okna in obrobe,
-- posodobiti `src/pricing-config.js`,
-- dodati teste za nove cenovne faktorje.
+Izvedeno v PR-003:
+
+- dodani vhodni podatki za naklon strehe,
+- dodano število dimnikov in strešnih oken,
+- dodana zahtevnost kleparskih detajlov,
+- dodana odstranitev obstoječe kritine po zahtevnosti,
+- dodan odvoz odpadnega materiala po zahtevnosti,
+- cenovne vrednosti ostajajo v `src/pricing-config.js`,
+- pricing logika ostaja v `src/pricing-engine.js`,
+- dodani testi za nove faktorje, dodatke in negativne vnose.
+
+Pred produkcijo še manjka:
+
+- pregled in potrditev vseh placeholder cenovnih predpostavk,
+- odločitev o obveznih podatkih za realno povpraševanje,
+- pregled pravnega besedila o informativnem in nezavezujočem izračunu,
+- bolj natančen model za oder, dvigalo, snegolove, dolžino žlebov in regijske razlike.
 
 ## PR-004 - Lead capture brez zunanjih servisov
 

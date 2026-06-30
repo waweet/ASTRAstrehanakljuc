@@ -1,8 +1,17 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import { test } from 'node:test';
 
 test('lead form blocks missing consent and includes the latest estimate when consent is present', async () => {
+  const html = readFileSync(new URL('../app/index.html', import.meta.url), 'utf8');
+  assert.match(html, /name="roofPitch"/);
+  assert.match(html, /name="chimneyCount"/);
+  assert.match(html, /name="roofWindowCount"/);
+  assert.match(html, /name="flashingComplexity"/);
+  assert.match(html, /name="existingRoofRemoval"/);
+  assert.match(html, /name="wasteHandling"/);
+
   const { quoteForm, leadForm, priceRange, priceNote, quoteError, leadError, windowLocation } = setupDom();
   const appUrl = pathToFileURL(new URL('../app/app.js', import.meta.url).pathname);
   appUrl.search = `?test=${Date.now()}`;
@@ -26,8 +35,24 @@ test('lead form blocks missing consent and includes the latest estimate when con
   assert.match(priceNote.textContent, /Izbrana kritina ni prepoznana/);
 
   quoteForm.setSelect('covering', 'clay_tiles', 'Opečna kritina');
+  quoteForm.setValue('chimneyCount', '-1');
+  quoteForm.submit();
+  assert.equal(quoteError.hidden, false);
+  assert.match(quoteError.textContent, /Število dimnikov mora biti celo število 0 ali več/);
+
+  quoteForm.setValue('chimneyCount', '2');
+  quoteForm.setValue('roofWindowCount', '-1');
+  quoteForm.submit();
+  assert.equal(quoteError.hidden, false);
+  assert.match(quoteError.textContent, /Število strešnih oken mora biti celo število 0 ali več/);
+
+  quoteForm.setValue('roofWindowCount', '1');
   quoteForm.setSelect('complexity', 'complex', 'Zahtevna');
   quoteForm.setSelect('access', 'very_difficult', 'Zelo zahtevna');
+  quoteForm.setSelect('roofPitch', 'steep', 'Strm / zahtevnejši naklon');
+  quoteForm.setSelect('flashingComplexity', 'complex', 'Zahtevni kleparski detajli');
+  quoteForm.setSelect('existingRoofRemoval', 'difficult', 'Zahtevna odstranitev');
+  quoteForm.setSelect('wasteHandling', 'difficult', 'Vključen odvoz pri zahtevnem dostopu');
   quoteForm.submit();
   assert.equal(quoteError.hidden, true);
   assert.match(priceRange.textContent, /\+ DDV/);
@@ -48,6 +73,12 @@ test('lead form blocks missing consent and includes the latest estimate when con
   assert.match(body, /Zadnji informativni izračun:/);
   assert.match(body, /\+ DDV/);
   assert.match(body, /Informativni razpon ni zavezujoča ponudba/);
+  assert.match(body, /Naklon strehe: Strm \/ zahtevnejši naklon/);
+  assert.match(body, /Število dimnikov: 2/);
+  assert.match(body, /Število strešnih oken: 1/);
+  assert.match(body, /Zahtevnost kleparskih detajlov: Zahtevni kleparski detajli/);
+  assert.match(body, /Odstranitev obstoječe kritine: Zahtevna odstranitev/);
+  assert.match(body, /Odvoz odpadnega materiala: Vključen odvoz pri zahtevnem dostopu/);
   assert.match(body, /Soglasje za uporabo podatkov za odgovor: potrjeno/);
 });
 
@@ -145,7 +176,8 @@ function setupDom() {
   const quoteForm = new FakeForm(
     {
       area: '180',
-      tearOff: true,
+      chimneyCount: '0',
+      roofWindowCount: '0',
       insulation: false,
       gutters: true,
     },
@@ -154,6 +186,10 @@ function setupDom() {
       covering: new FakeSelect('clay_tiles', 'Opečna kritina'),
       complexity: new FakeSelect('simple', 'Enostavna'),
       access: new FakeSelect('normal', 'Normalna'),
+      roofPitch: new FakeSelect('normal', 'Običajen naklon'),
+      flashingComplexity: new FakeSelect('normal', 'Običajni kleparski detajli'),
+      existingRoofRemoval: new FakeSelect('simple', 'Enostavna odstranitev'),
+      wasteHandling: new FakeSelect('normal', 'Vključen običajen odvoz'),
     },
   );
 

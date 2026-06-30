@@ -22,7 +22,16 @@ function readQuoteForm(form) {
     complexityLabel: readSelectedLabel(form, 'complexity'),
     access: readString(data, 'access'),
     accessLabel: readSelectedLabel(form, 'access'),
-    tearOff: data.has('tearOff'),
+    roofPitch: readString(data, 'roofPitch'),
+    roofPitchLabel: readSelectedLabel(form, 'roofPitch'),
+    chimneyCount: data.get('chimneyCount'),
+    roofWindowCount: data.get('roofWindowCount'),
+    flashingComplexity: readString(data, 'flashingComplexity'),
+    flashingComplexityLabel: readSelectedLabel(form, 'flashingComplexity'),
+    existingRoofRemoval: readString(data, 'existingRoofRemoval'),
+    existingRoofRemovalLabel: readSelectedLabel(form, 'existingRoofRemoval'),
+    wasteHandling: readString(data, 'wasteHandling'),
+    wasteHandlingLabel: readSelectedLabel(form, 'wasteHandling'),
     insulation: data.has('insulation'),
     gutters: data.has('gutters'),
   };
@@ -98,7 +107,12 @@ function buildEstimateEmailSection() {
     `Kritina / sistem: ${latestQuoteInput.coveringLabel || latestQuoteInput.covering || ''}`,
     `Zahtevnost oblike: ${latestQuoteInput.complexityLabel || latestQuoteInput.complexity || ''}`,
     `Dostopnost objekta: ${latestQuoteInput.accessLabel || latestQuoteInput.access || ''}`,
-    `Odstranitev stare kritine: ${latestQuoteInput.tearOff ? 'da' : 'ne'}`,
+    `Naklon strehe: ${latestQuoteInput.roofPitchLabel || latestQuoteInput.roofPitch || ''}`,
+    `Število dimnikov: ${latestQuoteInput.chimneyCount || '0'}`,
+    `Število strešnih oken: ${latestQuoteInput.roofWindowCount || '0'}`,
+    `Zahtevnost kleparskih detajlov: ${latestQuoteInput.flashingComplexityLabel || latestQuoteInput.flashingComplexity || ''}`,
+    `Odstranitev obstoječe kritine: ${latestQuoteInput.existingRoofRemovalLabel || latestQuoteInput.existingRoofRemoval || ''}`,
+    `Odvoz odpadnega materiala: ${latestQuoteInput.wasteHandlingLabel || latestQuoteInput.wasteHandling || ''}`,
     `Toplotna izolacija: ${latestQuoteInput.insulation ? 'da' : 'ne'}`,
     `Žlebovi in osnovna kleparska dela: ${latestQuoteInput.gutters ? 'da' : 'ne'}`,
   ];
@@ -125,6 +139,10 @@ function validateQuoteInput(input) {
     ['covering', 'Izberi kritino oziroma sistem.'],
     ['complexity', 'Izberi zahtevnost oblike strehe.'],
     ['access', 'Izberi dostopnost objekta.'],
+    ['roofPitch', 'Izberi naklon strehe.'],
+    ['flashingComplexity', 'Izberi zahtevnost kleparskih detajlov.'],
+    ['existingRoofRemoval', 'Izberi način odstranitve obstoječe kritine.'],
+    ['wasteHandling', 'Izberi možnost odvoza odpadnega materiala.'],
   ];
 
   for (const [field, message] of requiredChoices) {
@@ -132,6 +150,12 @@ function validateQuoteInput(input) {
       return { field, message };
     }
   }
+
+  const chimneyCountError = validateNonNegativeCount(input.chimneyCount, 'Število dimnikov', 'chimneyCount');
+  if (chimneyCountError) return chimneyCountError;
+
+  const roofWindowCountError = validateNonNegativeCount(input.roofWindowCount, 'Število strešnih oken', 'roofWindowCount');
+  if (roofWindowCountError) return roofWindowCountError;
 
   return null;
 }
@@ -174,7 +198,39 @@ function getQuoteErrorMessage(error) {
     return 'Izbrana dostopnost objekta ni prepoznana. Osveži stran ali izberi drugo možnost.';
   }
 
+  if (error.message?.startsWith('Neznana vrednost za naklon strehe')) {
+    return 'Izbrani naklon strehe ni prepoznan. Osveži stran ali izberi drugo možnost.';
+  }
+
+  if (error.message?.startsWith('Neznana vrednost za kleparski detajli')) {
+    return 'Izbrana zahtevnost kleparskih detajlov ni prepoznana. Osveži stran ali izberi drugo možnost.';
+  }
+
+  if (error.message?.startsWith('Neznana vrednost za odstranitev obstoječe kritine')) {
+    return 'Izbrana odstranitev obstoječe kritine ni prepoznana. Osveži stran ali izberi drugo možnost.';
+  }
+
+  if (error.message?.startsWith('Neznana vrednost za odvoz odpadnega materiala')) {
+    return 'Izbrani odvoz odpadnega materiala ni prepoznan. Osveži stran ali izberi drugo možnost.';
+  }
+
   return error.message || 'Izračuna trenutno ni mogoče pripraviti. Preveri vnesene podatke.';
+}
+
+function validateNonNegativeCount(value, label, field) {
+  if (value === null || value === undefined || value === '') {
+    return null;
+  }
+
+  const count = Number(value);
+  if (!Number.isInteger(count) || count < 0) {
+    return {
+      field,
+      message: `${label} mora biti celo število 0 ali več.`,
+    };
+  }
+
+  return null;
 }
 
 function focusField(form, fieldName) {

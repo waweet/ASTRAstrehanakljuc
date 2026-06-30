@@ -4,6 +4,8 @@
 
 Ta cenovni model je delovna osnova. Številke niso potrjen končni cenik podjetja ASTRA group d.o.o.
 
+Vrednosti v `src/pricing-config.js` so placeholder predpostavke za MVP. Pred javno uporabo jih mora pregledati in potrditi ASTRA group d.o.o.
+
 ## Osnovna formula
 
 ```text
@@ -13,12 +15,17 @@ dodatki =
   odstranitev stare kritine
   + izolacija
   + žlebovi / osnovna kleparska dela
+  + dimniki
+  + strešna okna
+  + odvoz odpadnega materiala
 
 vmesni seštevek = osnovna izvedba + dodatki
 
 prilagoditve =
   zahtevnost oblike
   + zahtevnost dostopa
+  + naklon strehe
+  + zahtevnost kleparskih detajlov
 
 informativni razpon = vmesni seštevek × spodnji / zgornji faktor
 ```
@@ -69,26 +76,81 @@ Pravila:
 
 ### Dodatki
 
-- Odstranitev stare kritine,
 - Toplotna izolacija,
-- Žlebovi in osnovna kleparska dela.
+- Žlebovi in osnovna kleparska dela,
+- Odstranitev obstoječe kritine,
+- Dimniki,
+- Strešna okna,
+- Odvoz odpadnega materiala.
 
 ### Faktorji
 
 - Zahtevnost oblike,
-- Dostopnost objekta.
+- Dostopnost objekta,
+- Naklon strehe,
+- Zahtevnost kleparskih detajlov.
+
+## PR-003 razširjeni vhodni podatki
+
+Kalkulator zdaj upošteva dodatne strešne dejavnike, ki vplivajo na informativni razpon:
+
+### Naklon strehe
+
+- Nizek / enostaven naklon,
+- Običajen naklon,
+- Strm / zahtevnejši naklon.
+
+Naklon je modeliran kot faktor, ker strmejše strehe praviloma zahtevajo več previdnosti, priprave in časa.
+
+### Dimniki
+
+Uporabnik vnese število dimnikov. Vsak dimnik doda konfiguriran znesek za obrobe in detajle.
+
+### Strešna okna
+
+Uporabnik vnese število strešnih oken. Vsako strešno okno doda konfiguriran znesek za obrobe in detajle.
+
+### Kleparski detajli
+
+- Osnovni kleparski detajli,
+- Običajni kleparski detajli,
+- Zahtevni kleparski detajli.
+
+Zahtevni detajli so modelirani kot faktor na vmesni seštevek.
+
+### Odstranitev obstoječe kritine
+
+- Brez odstranitve,
+- Enostavna odstranitev,
+- Zahtevna odstranitev.
+
+Odstranitev je modelirana kot znesek na m², ker je odvisna od površine strehe.
+
+### Odvoz odpadnega materiala
+
+- Ni vključeno,
+- Vključen običajen odvoz,
+- Vključen odvoz pri zahtevnem dostopu.
+
+Odvoz je modeliran kot znesek na m², ker se količina materiala običajno poveča s površino.
+
+## Omejitve modela
+
+Model še vedno ne predstavlja končne ponudbe. Ne vključuje vseh možnih postavk, kot so oder, dvigalo, snegolovi, dolžina žlebov v m¹, regijski faktorji, dejansko stanje konstrukcije ali posebni detajli na objektu.
+
+Pred produkcijsko uporabo je treba:
+
+- potrditi cenovne predpostavke v `src/pricing-config.js`,
+- preveriti faktorje za zahtevnost,
+- pravno pregledati opozorila o informativnosti,
+- določiti, kateri podatki so obvezni za realno povpraševanje.
 
 ## Priporočena nadgradnja
 
 V naslednji fazi naj pricing model podpira:
 
-- naklon strehe,
-- število dimnikov,
-- strešna okna,
-- obrobe,
 - snegolove,
 - dolžino žlebov v m¹,
-- odvoz po težavnosti,
 - oder,
 - regijski faktor,
 - ločen prikaz material / delo / dodatki.
