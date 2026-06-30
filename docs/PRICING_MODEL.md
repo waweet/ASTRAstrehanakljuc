@@ -8,6 +8,8 @@ Vrednosti v `src/pricing-config.js` so placeholder predpostavke za MVP. Pred jav
 
 Razširjen pregled aktivnih in prihodnjih cenovnih predpostavk je v `docs/PRICING_ASSUMPTIONS.md`. CSV različica za pregled je v `docs/pricing-assumptions.csv`.
 
+PR-005 katalog uporablja lastnikov spreadsheet `astra_cenik_poenostavljen_AI_v6.xlsx` kot vhod za pregledne postavke, vendar tega ne aktivira v kalkulatorju.
+
 ## Osnovna formula
 
 ```text
