@@ -89,10 +89,26 @@ Izvedeno v PR-006:
 
 Pred produkcijo še manjka:
 
-- ASTRA potrditev vseh aktiviranih vrednosti,
+- preverjanje ASTRA-potrjenih MVP testnih vrednosti na realnih primerih,
 - odločitev, ali checkbox dovolilnice zadostujejo ali so potrebne natančne količine,
 - pregled poenostavitev za oder, snegolove in kleparske obrobe,
 - pravni pregled informativnega/neobvezujočega besedila.
+
+## PR-007 - MVP test readiness
+
+Izvedeno v PR-007:
+
+- aktivne cene so označene kot ASTRA-potrjene vrednosti za omejeno MVP testiranje,
+- dodan je MVP testni načrt za majhno skupino realnih uporabnikov,
+- dodan je release/test checklist pred deljenjem s testerji,
+- dokumentacija o cenah poudarja, da rezultat ostaja informativen in nezavezujoč,
+- obnašanje kalkulatorja in numerične vrednosti niso spremenjeni.
+
+Po MVP testiranju je naslednji priporočeni PR odvisen od povratnih informacij:
+
+- mobile/visual polish, če se testerji težko prebijejo skozi obrazec,
+- backend/lead delivery, če je `mailto:` preveč nezanesljiv,
+- pricing refinement, če ASTRA ugotovi, da so razponi zavajajoči za tipične primere.
 
 ## Kasnejši produkcijski tok
 

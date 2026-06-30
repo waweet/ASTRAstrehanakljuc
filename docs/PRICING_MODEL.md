@@ -2,13 +2,15 @@
 
 ## Status
 
-Ta cenovni model je delovna osnova. Številke niso potrjen končni cenik podjetja ASTRA group d.o.o.
+Ta cenovni model je delovna osnova za omejeno MVP testiranje. Aktivne vrednosti v kalkulatorju so potrjene s strani ASTRA za MVP testno uporabo, vendar niso končni cenik podjetja ASTRA group d.o.o.
 
-Vrednosti v `src/pricing-config.js` so placeholder predpostavke za MVP. Pred javno uporabo jih mora pregledati in potrditi ASTRA group d.o.o.
+Vrednosti v `src/pricing-config.js` se uporabljajo samo za informativni in nezavezujoč izračun. Rezultat ni končna ponudba, ni pravno zavezujoča cena in ni zagotovljen strošek izvedbe.
 
 Razširjen pregled aktivnih in prihodnjih cenovnih predpostavk je v `docs/PRICING_ASSUMPTIONS.md`. CSV različica za pregled je v `docs/pricing-assumptions.csv`.
 
 PR-005 katalog uporablja lastnikov spreadsheet `astra_cenik_poenostavljen_AI_v6.xlsx` kot vhod za pregledne postavke, vendar tega ne aktivira v kalkulatorju.
+
+Za natančno ponudbo je še vedno potreben ASTRA pregled podatkov, fotografij, dejanskega stanja strehe, dostopa in izvedbenih pogojev.
 
 ## Osnovna formula
 
@@ -131,7 +133,7 @@ Aktivirani dodatki za dostop in pripravo:
 - Ročni prenos materiala,
 - Postavitev gradbišča.
 
-Postavke z znano dolžino, kot sta žleb in vertikalna odtočna cev, uporabljajo uporabnikov vnos v m¹. Nekatere checkbox postavke z enoto m¹ ali m² uporabljajo konfigurirane privzete dovolilnice, ker MVP ne zbira vseh natančnih mer. Te dovolilnice ostajajo informativne predpostavke in zahtevajo ASTRA potrditev pred produkcijo.
+Postavke z znano dolžino, kot sta žleb in vertikalna odtočna cev, uporabljajo uporabnikov vnos v m¹. Nekatere checkbox postavke z enoto m¹ ali m² uporabljajo konfigurirane privzete dovolilnice, ker MVP ne zbira vseh natančnih mer. Te dovolilnice so del ASTRA-potrjenih MVP testnih vrednosti, vendar ostajajo informativne in ne nadomestijo natančnih izmer pred ponudbo.
 
 ### Faktorji
 
@@ -190,7 +192,7 @@ Model še vedno ne predstavlja končne ponudbe. Ne vključuje vseh možnih posta
 
 Pred produkcijsko uporabo je treba:
 
-- potrditi cenovne predpostavke v `src/pricing-config.js`,
+- preveriti potrjene MVP testne cenovne predpostavke na realnih primerih,
 - preveriti faktorje za zahtevnost,
 - pravno pregledati opozorila o informativnosti,
 - določiti, kateri podatki so obvezni za realno povpraševanje.

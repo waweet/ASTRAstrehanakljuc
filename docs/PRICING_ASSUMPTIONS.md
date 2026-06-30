@@ -4,9 +4,9 @@
 
 This document is an internal review catalog for ASTRA group d.o.o. pricing assumptions.
 
-It separates values that are already active in the MVP calculator from expanded roof-work assumptions that are documented only for review. The expanded items are not active in the calculator and must not be shown as confirmed ASTRA prices.
+It separates values that are already active in the MVP calculator from expanded roof-work assumptions that are documented only for review. The expanded items are not active in the calculator unless their CSV status is `active_in_calculator`.
 
-All values are placeholder assumptions. They are not market prices, not confirmed ASTRA prices and not production-ready. ASTRA must review and approve assumptions before they are used publicly or moved into the calculator.
+Active calculator values are now ASTRA-confirmed MVP test values for limited testing. They are still used only for informative and non-binding estimates, not final offer prices. Public production rollout still requires final ASTRA business and legal review.
 
 PR-005 used the owner-provided spreadsheet `astra_cenik_poenostavljen_AI_v6.xlsx` as an input source for the expanded review catalog. The spreadsheet itself is not committed to the repository. Its source notes identify `AI_Gradbeni_Sistem_CENIK_v6(4).ods` and a preparation date of 30.06.2026.
 
@@ -18,12 +18,27 @@ docs/pricing-assumptions.csv
 
 ## Status legend
 
-- `active in calculator` - the assumption is currently represented in `src/pricing-config.js` and used by `src/pricing-engine.js`.
+- `active in calculator` - the assumption is currently represented in `src/pricing-config.js`, used by `src/pricing-engine.js` and confirmed by ASTRA for limited MVP testing.
 - `review only - not yet active in calculator` - the assumption is documented for ASTRA review only and does not affect the live estimate.
+
+## MVP pricing confirmation
+
+ASTRA has confirmed the active calculator values for limited MVP testing with a small group of real users. This confirmation covers only values that are currently active in `src/pricing-config.js` and marked as `active_in_calculator` in `docs/pricing-assumptions.csv`.
+
+The calculator still produces an informative range. It does not create a final price, legally binding offer or production-ready price list. An accurate offer still requires ASTRA review of the submitted data, photos, execution conditions, access, details and any missing measurements.
+
+Review-only rows with numeric values may be treated as catalog/reference values for internal review, but they are not active in the calculator unless explicitly moved into runtime configuration by a later PR. Rows with `placeholder_value=TBD` remain not confirmed and not priced.
+
+Before full public production ASTRA still needs to review:
+
+- final business/legal wording,
+- privacy/GDPR text,
+- whether configured allowances are acceptable or exact measured quantities are required,
+- whether the active price ranges are reliable enough after real-user MVP feedback.
 
 ## Active calculator assumptions
 
-The current calculator uses placeholder values for:
+The current calculator uses ASTRA-confirmed MVP test values for:
 
 - base roof covering rates by selected covering system,
 - roof shape complexity multipliers,
@@ -43,7 +58,7 @@ The current calculator uses placeholder values for:
 - estimate low/high range factors,
 - minimum project value.
 
-These values remain configurable in `src/pricing-config.js`. They are active only as informative MVP assumptions and must be reviewed by ASTRA before production use.
+These values remain configurable in `src/pricing-config.js`. They are active only for informative MVP test estimates and must not be treated as final offer prices.
 
 ## Review-only expanded assumptions
 
@@ -57,7 +72,7 @@ The CSV also includes:
 - orientation-only m² package rows from the `Paketi m2` sheet,
 - rows from the `Manjka v AI` sheet where the source workbook says a price is not yet available.
 
-Rows copied from the spreadsheet remain `review only - not yet active in calculator`, even when the spreadsheet has a numeric value, unless a later PR explicitly activates that row or adds a matching active runtime row.
+Rows copied from the spreadsheet remain `review only - not yet active in calculator`, even when the spreadsheet has a numeric value, unless a later PR explicitly activates that row or adds a matching active runtime row. Numeric review-only rows may be useful as catalog/reference values, but they are not active prices in the MVP calculator.
 
 ## PR-006 activated subset
 
@@ -206,5 +221,5 @@ Recommended review fields:
 - Keep calculation logic in `src/pricing-engine.js`.
 - Add tests for every new active pricing factor or line item.
 - Keep the result as an informative range, not a final offer.
-- Do not activate review-only assumptions until ASTRA confirms values and business rules.
+- Do not activate review-only assumptions until ASTRA confirms values, business rules and calculator behavior for that row.
 - If future pricing becomes too detailed for the static app, create a separate architecture PR before adding backend or admin tooling.
