@@ -5,6 +5,8 @@ const leadForm = document.querySelector('#lead-form');
 const priceRange = document.querySelector('#price-range');
 const priceNote = document.querySelector('#price-note');
 const breakdown = document.querySelector('#breakdown');
+const quoteError = document.querySelector('#quote-error');
+const leadError = document.querySelector('#lead-error');
 let latestQuote = null;
 let latestQuoteInput = null;
 
@@ -29,6 +31,7 @@ function readQuoteForm(form) {
 function renderQuote(result, input) {
   latestQuote = result;
   latestQuoteInput = input;
+  hideError(quoteError);
   priceRange.textContent = `${formatCurrency(result.low)} - ${formatCurrency(result.high)} + DDV`;
   priceNote.textContent = result.note;
   breakdown.innerHTML = '';
@@ -47,9 +50,23 @@ function renderQuote(result, input) {
 function renderQuoteError(error) {
   latestQuote = null;
   latestQuoteInput = null;
-  priceRange.textContent = 'Izračun ni mogoč';
-  priceNote.textContent = error.message;
+  const message = getQuoteErrorMessage(error);
+  showError(quoteError, message);
+  priceRange.textContent = 'Preveri vnos';
+  priceNote.textContent = message;
   breakdown.innerHTML = '';
+}
+
+function showError(container, message) {
+  if (!container) return;
+  container.textContent = message;
+  container.hidden = false;
+}
+
+function hideError(container) {
+  if (!container) return;
+  container.textContent = '';
+  container.hidden = true;
 }
 
 function readString(data, key) {
@@ -87,9 +104,94 @@ function buildEstimateEmailSection() {
   ];
 }
 
+function validateQuoteInput(input) {
+  if (!String(input.area || '').trim()) {
+    return {
+      field: 'area',
+      message: 'Vnesi površino strehe v m².',
+    };
+  }
+
+  const area = Number(input.area);
+  if (!Number.isFinite(area) || area <= 0) {
+    return {
+      field: 'area',
+      message: 'Površina strehe mora biti pozitivno število.',
+    };
+  }
+
+  const requiredChoices = [
+    ['roofType', 'Izberi tip strehe.'],
+    ['covering', 'Izberi kritino oziroma sistem.'],
+    ['complexity', 'Izberi zahtevnost oblike strehe.'],
+    ['access', 'Izberi dostopnost objekta.'],
+  ];
+
+  for (const [field, message] of requiredChoices) {
+    if (!input[field]) {
+      return { field, message };
+    }
+  }
+
+  return null;
+}
+
+function validateLeadInput(data) {
+  if (!readString(data, 'name')) {
+    return {
+      field: 'name',
+      message: 'Vnesi ime in priimek.',
+    };
+  }
+
+  if (!readString(data, 'phone') && !readString(data, 'email')) {
+    return {
+      field: 'phone',
+      message: 'Vnesi telefon ali email, da lahko ASTRA odgovori na povpraševanje.',
+    };
+  }
+
+  if (!data.has('consent')) {
+    return {
+      field: 'consent',
+      message: 'Za pripravo povpraševanja potrdi, da lahko ASTRA group d.o.o. uporabi podatke za odgovor.',
+    };
+  }
+
+  return null;
+}
+
+function getQuoteErrorMessage(error) {
+  if (error.message?.startsWith('Neznana vrednost za kritina')) {
+    return 'Izbrana kritina ni prepoznana. Osveži stran ali izberi drugo možnost.';
+  }
+
+  if (error.message?.startsWith('Neznana vrednost za zahtevnost')) {
+    return 'Izbrana zahtevnost strehe ni prepoznana. Osveži stran ali izberi drugo možnost.';
+  }
+
+  if (error.message?.startsWith('Neznana vrednost za dostopnost')) {
+    return 'Izbrana dostopnost objekta ni prepoznana. Osveži stran ali izberi drugo možnost.';
+  }
+
+  return error.message || 'Izračuna trenutno ni mogoče pripraviti. Preveri vnesene podatke.';
+}
+
+function focusField(form, fieldName) {
+  const field = form.elements[fieldName];
+  field?.focus?.();
+}
+
 quoteForm.addEventListener('submit', (event) => {
   event.preventDefault();
   const input = readQuoteForm(quoteForm);
+  const validationError = validateQuoteInput(input);
+
+  if (validationError) {
+    renderQuoteError(new Error(validationError.message));
+    focusField(quoteForm, validationError.field);
+    return;
+  }
 
   try {
     const result = calculateRoofQuote(input);
@@ -102,21 +204,31 @@ quoteForm.addEventListener('submit', (event) => {
 leadForm.addEventListener('submit', (event) => {
   event.preventDefault();
   const data = new FormData(leadForm);
+  const validationError = validateLeadInput(data);
+
+  if (validationError) {
+    showError(leadError, validationError.message);
+    focusField(leadForm, validationError.field);
+    return;
+  }
+
+  hideError(leadError);
   const subject = encodeURIComponent('Povpraševanje za streho na ključ');
   const body = encodeURIComponent([
     'Pozdravljeni,',
     '',
     'prosim za odziv glede strehe na ključ.',
     '',
-    `Ime: ${data.get('name') || ''}`,
-    `Telefon: ${data.get('phone') || ''}`,
-    `Email: ${data.get('email') || ''}`,
-    `Lokacija: ${data.get('location') || ''}`,
+    `Ime: ${readString(data, 'name')}`,
+    `Telefon: ${readString(data, 'phone')}`,
+    `Email: ${readString(data, 'email')}`,
+    `Lokacija: ${readString(data, 'location')}`,
+    `Soglasje za uporabo podatkov za odgovor: potrjeno`,
     '',
     ...buildEstimateEmailSection(),
     '',
     'Opis:',
-    `${data.get('message') || ''}`,
+    `${readString(data, 'message')}`,
     '',
     'Lep pozdrav',
   ].join('\n'));

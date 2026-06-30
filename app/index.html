@@ -59,48 +59,51 @@
           <p class="eyebrow">Kalkulator</p>
           <h2>Informativni izračun</h2>
 
-          <label>
-            Površina strehe v m²
-            <input name="area" type="number" min="20" max="1000" value="180" required />
-          </label>
+          <div id="quote-error" class="form-error" role="alert" hidden></div>
 
-          <label>
-            Tip strehe
-            <select name="roofType">
+          <div class="field">
+            <label for="area">Površina strehe v m² <span class="required">(obvezno)</span></label>
+            <input id="area" name="area" type="number" min="20" max="1000" value="180" required aria-describedby="area-help" />
+            <p id="area-help" class="field-help">Vnesi približno površino strehe. Če je ne poznaš, uporabi najboljšo oceno.</p>
+          </div>
+
+          <div class="field">
+            <label for="roofType">Tip strehe</label>
+            <select id="roofType" name="roofType" required>
               <option value="dvokapnica">Dvokapnica</option>
               <option value="enokapnica">Enokapnica</option>
               <option value="ravna">Ravna streha</option>
               <option value="kompleksna">Kompleksna streha</option>
             </select>
-          </label>
+          </div>
 
-          <label>
-            Kritina / sistem
-            <select name="covering">
+          <div class="field">
+            <label for="covering">Kritina / sistem <span class="required">(obvezno)</span></label>
+            <select id="covering" name="covering" required>
               <option value="clay_tiles">Opečna kritina</option>
               <option value="concrete_tiles">Betonska kritina</option>
               <option value="metal_sheet">Pločevinasta kritina</option>
               <option value="flat_membrane">Ravna streha - membrana</option>
             </select>
-          </label>
+          </div>
 
-          <label>
-            Zahtevnost oblike
-            <select name="complexity">
+          <div class="field">
+            <label for="complexity">Zahtevnost oblike <span class="required">(obvezno)</span></label>
+            <select id="complexity" name="complexity" required>
               <option value="simple">Enostavna</option>
               <option value="medium">Srednje zahtevna</option>
               <option value="complex">Zahtevna</option>
             </select>
-          </label>
+          </div>
 
-          <label>
-            Dostopnost objekta
-            <select name="access">
+          <div class="field">
+            <label for="access">Dostopnost objekta <span class="required">(obvezno)</span></label>
+            <select id="access" name="access" required>
               <option value="normal">Normalna</option>
               <option value="difficult">Zahtevna</option>
               <option value="very_difficult">Zelo zahtevna</option>
             </select>
-          </label>
+          </div>
 
           <fieldset>
             <legend>Dodatna dela</legend>
@@ -109,7 +112,7 @@
             <label class="check"><input name="gutters" type="checkbox" checked /> Žlebovi in osnovna kleparska dela</label>
           </fieldset>
 
-          <button class="button primary" type="submit">Izračunaj</button>
+          <button class="button primary" type="submit">Izračunaj informativni razpon</button>
         </form>
 
         <aside class="panel result-panel" aria-live="polite">
@@ -132,28 +135,41 @@
           </p>
         </div>
         <form id="lead-form" class="panel">
-          <label>
-            Ime in priimek
-            <input name="name" type="text" placeholder="Janez Novak" required />
+          <div id="lead-error" class="form-error" role="alert" hidden></div>
+
+          <div class="field">
+            <label for="name">Ime in priimek <span class="required">(obvezno)</span></label>
+            <input id="name" name="name" type="text" autocomplete="name" placeholder="Janez Novak" required />
+          </div>
+
+          <div class="field">
+            <label for="phone">Telefon</label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="040 000 000" aria-describedby="contact-help" />
+          </div>
+
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="ime@email.si" aria-describedby="contact-help" />
+            <p id="contact-help" class="field-help">Vnesi telefon ali email, da lahko ASTRA odgovori na povpraševanje.</p>
+          </div>
+
+          <div class="field">
+            <label for="location">Lokacija objekta</label>
+            <input id="location" name="location" type="text" autocomplete="address-level2" placeholder="Koper, Izola, Ljubljana ..." />
+          </div>
+
+          <div class="field">
+            <label for="message">Opis strehe in želja</label>
+            <textarea id="message" name="message" rows="5" placeholder="Opiši trenutno stanje strehe, približno lokacijo, želena dela in ali je izvedba nujna ali okvirna."></textarea>
+          </div>
+
+          <label class="check consent">
+            <input name="consent" type="checkbox" required />
+            <span>Strinjam se, da ASTRA group d.o.o. uporabi poslane podatke za odgovor na moje povpraševanje.</span>
           </label>
-          <label>
-            Telefon
-            <input name="phone" type="tel" placeholder="040 000 000" required />
-          </label>
-          <label>
-            Email
-            <input name="email" type="email" placeholder="ime@email.si" />
-          </label>
-          <label>
-            Lokacija objekta
-            <input name="location" type="text" placeholder="Koper, Izola, Ljubljana ..." />
-          </label>
-          <label>
-            Kratek opis
-            <textarea name="message" rows="5" placeholder="Npr. menjava kritine, izolacija, žlebovi, težji dostop ..."></textarea>
-          </label>
-          <button class="button primary" type="submit">Pripravi email</button>
-          <p class="small">S klikom se odpre osnutek emaila. V produkciji naj bo dodana GDPR privolitev.</p>
+
+          <button class="button primary" type="submit">Pripravi email povpraševanja</button>
+          <p class="small">S klikom se odpre osnutek emaila. Podatki se brez tvoje potrditve emaila ne pošljejo samodejno.</p>
         </form>
       </section>
     </main>

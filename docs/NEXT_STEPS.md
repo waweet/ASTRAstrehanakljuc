@@ -4,9 +4,21 @@ Predlagano zaporedje naslednjih PR-jev za ASTRA kalkulator:
 
 ## PR-002 - Vsebina in UX obrazca
 
-- izboljšati slovenske mikro-kopije v kalkulatorju in povpraševanju,
-- dodati jasnejša sporočila za napake pri vnosu,
-- preveriti mobilno postavitev in osnovno dostopnost.
+Izvedeno v PR-002:
+
+- jasnejša slovenska sporočila za napake v kalkulatorju,
+- bolj eksplicitne oznake polj in pomoč pri vnosu,
+- zahteva za telefon ali email pri povpraševanju,
+- obvezna privolitev za uporabo podatkov za odgovor na povpraševanje,
+- strukturiran osnutek emaila z informativnim izračunom,
+- osnovna preverba ozke mobilne postavitve.
+
+Pred produkcijo še manjka:
+
+- pregled končnega GDPR/privacy besedila,
+- potrjen produkcijski kontaktni naslov,
+- odločitev, ali `mailto:` ostane dovolj ali je potreben backend/CRM,
+- zaščita pred neželenimi povpraševanji, če bo dodan javni backend.
 
 ## PR-003 - Razširitev pricing modela
 

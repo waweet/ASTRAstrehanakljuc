@@ -44,7 +44,7 @@ body {
 
 .brand {
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
 }
 
 .header-cta {
@@ -70,7 +70,7 @@ body {
 .hero h1 {
   font-size: clamp(44px, 8vw, 88px);
   line-height: 0.95;
-  letter-spacing: -0.07em;
+  letter-spacing: 0;
   margin: 0 0 24px;
   max-width: 780px;
 }
@@ -178,7 +178,7 @@ body {
 .panel h2,
 .lead-section h2 {
   margin: 0 0 12px;
-  letter-spacing: -0.04em;
+  letter-spacing: 0;
 }
 
 .three-cols p,
@@ -208,6 +208,23 @@ legend {
   font-weight: 800;
 }
 
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.required,
+.field-help {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.field-help {
+  font-size: 13px;
+  line-height: 1.45;
+  margin: 0;
+}
+
 input,
 select,
 textarea {
@@ -218,6 +235,25 @@ textarea {
   font: inherit;
   background: #fff;
   color: var(--ink);
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.button:focus-visible,
+.header-cta:focus-visible {
+  outline: 3px solid rgba(21, 43, 69, 0.35);
+  outline-offset: 3px;
+}
+
+.form-error {
+  border: 1px solid #b84a3a;
+  border-radius: 14px;
+  padding: 12px 14px;
+  color: #7a2519;
+  background: #fff1ee;
+  font-weight: 700;
+  line-height: 1.45;
 }
 
 fieldset {
@@ -237,6 +273,11 @@ fieldset {
 
 .check input {
   width: auto;
+}
+
+.consent {
+  align-items: flex-start;
+  line-height: 1.45;
 }
 
 .result-panel {
@@ -296,7 +337,29 @@ fieldset {
     padding: 48px 0;
   }
 
+  .hero h1 {
+    font-size: 42px;
+    line-height: 1.05;
+  }
+
   .result-panel {
     position: static;
+  }
+}
+
+@media (max-width: 520px) {
+  .site-header,
+  .site-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .three-cols article,
+  .panel {
+    padding: 22px;
+  }
+
+  .button {
+    width: 100%;
   }
 }
