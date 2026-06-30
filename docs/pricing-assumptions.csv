@@ -1,0 +1,85 @@
+group,item_key,label,unit,placeholder_value,status,notes
+active_covering,covering_clay_tiles,Opečna kritina,m2,155,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_covering,covering_concrete_tiles,Betonska kritina,m2,135,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_covering,covering_metal_sheet,Pločevinasta kritina,m2,125,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_covering,covering_flat_membrane,Ravna streha - membrana,m2,145,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_complexity,roof_shape_simple,Enostavna oblika,factor,1,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_complexity,roof_shape_medium,Srednje zahtevna oblika,factor,1.12,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_complexity,roof_shape_complex,Zahtevna oblika,factor,1.25,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_access,access_normal,Normalna dostopnost,factor,1,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_access,access_difficult,Zahtevna dostopnost,factor,1.12,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_access,access_very_difficult,Zelo zahtevna dostopnost,factor,1.22,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_pitch,roof_pitch_low,Nizek / enostaven naklon,factor,1,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_pitch,roof_pitch_normal,Običajen naklon,factor,1,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_pitch,roof_pitch_steep,Strm / zahtevnejši naklon,factor,1.14,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_flashing,flashing_basic,Osnovni kleparski detajli,factor,1,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_flashing,flashing_normal,Običajni kleparski detajli,factor,1,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_flashing,flashing_complex,Zahtevni kleparski detajli,factor,1.1,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_details,chimney_unit,Dimniki - obrobe in detajli,kos,420,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_details,roof_window_unit,Strešna okna - obrobe in detajli,kos,360,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_removal,existing_roof_removal_none,Brez odstranitve obstoječe kritine,m2,0,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_removal,existing_roof_removal_simple,Odstranitev obstoječe kritine - enostavna,m2,18,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_removal,existing_roof_removal_difficult,Odstranitev obstoječe kritine - zahtevna,m2,28,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_waste,waste_handling_none,Odvoz odpadnega materiala ni vključen,m2,0,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_waste,waste_handling_normal,Vključen običajen odvoz odpadnega materiala,m2,10,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_waste,waste_handling_difficult,Vključen odvoz pri zahtevnem dostopu,m2,18,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_addons,insulation,Toplotna izolacija,m2,45,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_addons,gutters,Žlebovi in osnovna kleparska dela,m2,24,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_estimate,estimate_low_factor,Spodnji faktor informativnega razpona,percent,0.9,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_estimate,estimate_high_factor,Zgornji faktor informativnega razpona,percent,1.18,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+active_estimate,minimum_project_value,Minimalna vrednost projekta,fixed,6500,active_in_calculator,Placeholder active MVP assumption pending ASTRA confirmation
+roof_layers,vapor_permeable_membrane,Paroprepustna folija,m2,6,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+roof_layers,vapor_barrier,Parna zapora,m2,7,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+roof_layers,roof_boarding,Deskanje / opaž,m2,22,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+roof_layers,osb_boards,OSB plošče,m2,24,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+roof_layers,roof_battens,Strešne letve,m2,12,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+roof_layers,counter_battens,Kontra letve,m2,10,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+roof_layers,ventilation_layer,Prezračevalni sloj,m2,8,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+roof_layers,between_rafter_insulation,Toplotna izolacija med špirovci,m2,48,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+roof_layers,above_rafter_insulation,Toplotna izolacija nad špirovci,m2,72,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+roof_layers,secondary_roof_covering,Sekundarna kritina,m2,14,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+roof_layers,insect_vent_mesh,Zaščitna mrežica proti insektom pri prezračevanju,m1,4,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+structural_timber,new_rafters_beams,Novi špirovci / tramovi,m1,38,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+structural_timber,damaged_beam_replacement,Zamenjava poškodovanih tramov,m1,52,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+structural_timber,roof_structure_reinforcement,Ojačitev obstoječega ostrešja,m2,32,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+structural_timber,eaves_purlin,Kapna lega,m1,44,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+structural_timber,ridge_purlin,Sleme / slemenska lega,m1,46,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+structural_timber,timber_impregnation,Impregnacija lesa,m2,6,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+structural_timber,minor_carpentry_repairs,Manjša mizarska popravila,kpl,450,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+roofing_elements,basic_roof_covering,Osnovna kritina,m2,80,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+roofing_elements,ridge_tiles,Slemenjaki / sleme,m1,34,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+roofing_elements,edge_tiles,Krajnik / krajna kritina,m1,30,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+roofing_elements,eaves_finish,Kapni zaključek,m1,22,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+roofing_elements,hip_tiles,Grebenska kritina,m1,36,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+roofing_elements,roof_vents,Zračniki na strehi,kos,55,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+roofing_elements,ridge_vent_element,Prezračevalni element slemena,m1,18,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+roofing_elements,roof_penetrations,Preboji skozi streho,kos,85,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+roofing_elements,penetration_sealing,Tesnjenje prebojev,kos,75,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+roofing_elements,snow_guards,Snegolovi,m1,26,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+roofing_elements,roof_steps,Strešne stopnice,kos,42,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+roofing_elements,chimney_walkway,Pohodna rešetka / dimnikarska pot,m1,95,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+sheet_metal,gutter,Žleb,m1,28,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+sheet_metal,vertical_downpipe,Vertikalna odtočna cev,m1,24,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+sheet_metal,valley_flashing,Žlota,m1,48,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+sheet_metal,eaves_flashing,Kapna obroba,m1,22,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+sheet_metal,wind_board_flashing,Čelna / vetrna obroba,m1,30,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+sheet_metal,wall_flashing,Zidna obroba,m1,36,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+sheet_metal,chimney_flashing,Dimniška obroba,kos,420,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+sheet_metal,roof_window_flashing,Obroba strešnega okna,kos,360,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+sheet_metal,dormer_finish,Zaključek pri frčadi,kpl,650,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+sheet_metal,attic_cap_flashing,Pločevinasta zaščita atike,m1,42,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+sheet_metal,water_collector_box,Lovilec vode / kotliček,kos,95,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+sheet_metal,elbows_connectors,Kolena in spojni elementi,kos,18,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+site_setup,existing_roof_covering_removal,Demontaža obstoječe kritine,m2,18,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+site_setup,batten_removal,Demontaža letev,m2,8,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+site_setup,old_sheet_metal_removal,Demontaža stare pločevine,m1,10,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+site_setup,waste_material_transport,Odvoz odpadnega materiala,m2,12,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+site_setup,manual_material_carry,Ročni prenos materiala,m2,9,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+site_setup,difficult_access,Otežen dostop,factor,1.12,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+site_setup,site_setup,Postavitev gradbišča,fixed,350,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+site_setup,surroundings_protection,Zaščita okolice,fixed,250,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+site_setup,scaffolding,Oder,m2,12,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+site_setup,lifting_platform,Dvižna košara,fixed,450,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+site_setup,mobile_crane,Avtodvigalo,fixed,650,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+site_setup,height_work,Delo na višini,factor,1.08,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation
+site_setup,steep_pitch_extra_protection,Dodatna zaščita pri zahtevnem naklonu,factor,1.06,review_only_not_active,Review placeholder only not active in calculator needs ASTRA confirmation

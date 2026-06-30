@@ -58,7 +58,25 @@ Pred produkcijo še manjka:
 - pravni pregled besedil o informativnem in nezavezujočem izračunu,
 - potrjena politika obdelave povpraševanj in hranjenja podatkov.
 
-## PR-005 - Priprava na produkcijski tok
+## PR-005 - Katalog cenovnih predpostavk
+
+Izvedeno v PR-005:
+
+- dodan interni katalog cenovnih predpostavk v `docs/PRICING_ASSUMPTIONS.md`,
+- dodan pregledni CSV v `docs/pricing-assumptions.csv`,
+- popisane so trenutno aktivne predpostavke iz kalkulatorja,
+- dodane so razširjene postavke za sloje strehe, leseno konstrukcijo, kritino, kleparska dela, odstranitev, odvoz, dostop in pripravo gradbišča,
+- razširjene postavke so jasno označene kot pregledne in še niso aktivne v kalkulatorju.
+
+Pred naslednjo razširitvijo modela je potreben ASTRA pregled:
+
+- katere postavke ostanejo,
+- katere vrednosti se spremenijo,
+- katere postavke se odstranijo,
+- za katere postavke je potreben dobaviteljski predračun,
+- katere potrjene postavke se lahko kasneje prenesejo v `src/pricing-config.js`.
+
+## Kasnejši produkcijski tok
 
 - odločitev o backendu, email pošiljanju ali CRM povezavi,
 - pripraviti okoljske nastavitve brez skrivnosti v repozitoriju,
