@@ -64,6 +64,7 @@ Izvedeno v PR-005:
 
 - dodan interni katalog cenovnih predpostavk v `docs/PRICING_ASSUMPTIONS.md`,
 - dodan pregledni CSV v `docs/pricing-assumptions.csv`,
+- katalog je dopolnjen iz lastnikovega spreadsheet vira `astra_cenik_poenostavljen_AI_v6.xlsx`,
 - popisane so trenutno aktivne predpostavke iz kalkulatorja,
 - dodane so razširjene postavke za sloje strehe, leseno konstrukcijo, kritino, kleparska dela, odstranitev, odvoz, dostop in pripravo gradbišča,
 - razširjene postavke so jasno označene kot pregledne in še niso aktivne v kalkulatorju.

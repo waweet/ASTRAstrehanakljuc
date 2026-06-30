@@ -8,6 +8,8 @@ It separates values that are already active in the MVP calculator from expanded 
 
 All values are placeholder assumptions. They are not market prices, not confirmed ASTRA prices and not production-ready. ASTRA must review and approve assumptions before they are used publicly or moved into the calculator.
 
+PR-005 used the owner-provided spreadsheet `astra_cenik_poenostavljen_AI_v6.xlsx` as an input source for the expanded review catalog. The spreadsheet itself is not committed to the repository. Its source notes identify `AI_Gradbeni_Sistem_CENIK_v6(4).ods` and a preparation date of 30.06.2026.
+
 The machine-readable review file is:
 
 ```text
@@ -44,6 +46,14 @@ These values remain configurable in `src/pricing-config.js`. They are active onl
 The following groups list possible future pricing inputs and line items. They are not active in the calculator in PR-005.
 
 Future PRs may move approved assumptions into `src/pricing-config.js`, but only after ASTRA review and with tests for any new calculation logic.
+
+The CSV also includes:
+
+- source spreadsheet pricing rows from the `Cenik` sheet,
+- orientation-only m² package rows from the `Paketi m2` sheet,
+- rows from the `Manjka v AI` sheet where the source workbook says a price is not yet available.
+
+Rows copied from the spreadsheet remain `review only - not yet active in calculator`, even when the spreadsheet has a numeric value.
 
 ## Roof layers
 
