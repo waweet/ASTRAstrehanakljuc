@@ -64,6 +64,42 @@ test('rejects invalid area', () => {
   }, /pozitivno/);
 });
 
+test('rejects unknown covering with a clear error', () => {
+  assert.throws(() => {
+    calculateRoofQuote({
+      area: 180,
+      covering: 'unknown_covering',
+      complexity: 'simple',
+      access: 'normal',
+    });
+  }, /Neznana vrednost za kritina: unknown_covering/);
+});
+
+test('complex roof with very difficult access is higher than simple roof for same area and covering', () => {
+  const baseInput = {
+    area: 180,
+    covering: 'clay_tiles',
+    tearOff: false,
+    insulation: false,
+    gutters: false,
+  };
+
+  const simple = calculateRoofQuote({
+    ...baseInput,
+    complexity: 'simple',
+    access: 'normal',
+  });
+  const difficult = calculateRoofQuote({
+    ...baseInput,
+    complexity: 'complex',
+    access: 'very_difficult',
+  });
+
+  assert.ok(difficult.low > simple.low);
+  assert.ok(difficult.high > simple.high);
+  assert.ok(difficult.midpoint > simple.midpoint);
+});
+
 test('formats currency for Slovenian locale', () => {
   assert.equal(formatCurrency(12500), '12.500 €');
 });

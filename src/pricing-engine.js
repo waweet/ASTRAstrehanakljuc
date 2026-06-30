@@ -3,6 +3,10 @@ import { pricingConfig } from './pricing-config.js';
 const DEFAULT_NOTE = 'Informativni razpon ni zavezujoča ponudba. Končna cena je odvisna od ogleda, dejanskega stanja konstrukcije, dostopa, detajlov in izbranih materialov.';
 
 export function calculateRoofQuote(input, config = pricingConfig) {
+  if (!input || typeof input !== 'object') {
+    throw new Error('Podatki za izračun so obvezni.');
+  }
+
   const area = Number(input.area);
 
   if (!Number.isFinite(area) || area <= 0) {
@@ -66,11 +70,20 @@ export function formatCurrency(value, locale = 'sl-SI') {
 }
 
 function getConfigItem(collection, key, label) {
-  const item = collection[key];
+  const normalizedKey = normalizeConfigKey(key);
+  const item = collection[normalizedKey];
   if (!item) {
-    throw new Error(`Neznana vrednost za ${label}: ${key}`);
+    throw new Error(`Neznana vrednost za ${label}: ${normalizedKey || 'ni izbrano'}`);
   }
   return item;
+}
+
+function normalizeConfigKey(key) {
+  if (typeof key !== 'string') {
+    return '';
+  }
+
+  return key.trim();
 }
 
 function roundToNearestTen(value) {

@@ -5,22 +5,30 @@ const leadForm = document.querySelector('#lead-form');
 const priceRange = document.querySelector('#price-range');
 const priceNote = document.querySelector('#price-note');
 const breakdown = document.querySelector('#breakdown');
+let latestQuote = null;
+let latestQuoteInput = null;
 
 function readQuoteForm(form) {
   const data = new FormData(form);
   return {
-    area: Number(data.get('area')),
-    roofType: String(data.get('roofType')),
-    covering: String(data.get('covering')),
-    complexity: String(data.get('complexity')),
-    access: String(data.get('access')),
+    area: data.get('area'),
+    roofType: readString(data, 'roofType'),
+    roofTypeLabel: readSelectedLabel(form, 'roofType'),
+    covering: readString(data, 'covering'),
+    coveringLabel: readSelectedLabel(form, 'covering'),
+    complexity: readString(data, 'complexity'),
+    complexityLabel: readSelectedLabel(form, 'complexity'),
+    access: readString(data, 'access'),
+    accessLabel: readSelectedLabel(form, 'access'),
     tearOff: data.has('tearOff'),
     insulation: data.has('insulation'),
     gutters: data.has('gutters'),
   };
 }
 
-function renderQuote(result) {
+function renderQuote(result, input) {
+  latestQuote = result;
+  latestQuoteInput = input;
   priceRange.textContent = `${formatCurrency(result.low)} - ${formatCurrency(result.high)} + DDV`;
   priceNote.textContent = result.note;
   breakdown.innerHTML = '';
@@ -36,11 +44,59 @@ function renderQuote(result) {
   }
 }
 
+function renderQuoteError(error) {
+  latestQuote = null;
+  latestQuoteInput = null;
+  priceRange.textContent = 'Izračun ni mogoč';
+  priceNote.textContent = error.message;
+  breakdown.innerHTML = '';
+}
+
+function readString(data, key) {
+  const value = data.get(key);
+  return typeof value === 'string' ? value.trim() : '';
+}
+
+function readSelectedLabel(form, key) {
+  const field = form.elements[key];
+  return field instanceof HTMLSelectElement ? field.selectedOptions[0]?.textContent.trim() || '' : '';
+}
+
+function buildEstimateEmailSection() {
+  if (!latestQuote) {
+    return [
+      'Zadnji informativni izračun:',
+      'Ni bil uspešno izračunan.',
+    ];
+  }
+
+  return [
+    'Zadnji informativni izračun:',
+    `${formatCurrency(latestQuote.low)} - ${formatCurrency(latestQuote.high)} + DDV`,
+    latestQuote.note,
+    '',
+    'Podatki iz kalkulatorja:',
+    `Površina: ${latestQuoteInput.area || ''} m²`,
+    `Tip strehe: ${latestQuoteInput.roofTypeLabel || latestQuoteInput.roofType || ''}`,
+    `Kritina / sistem: ${latestQuoteInput.coveringLabel || latestQuoteInput.covering || ''}`,
+    `Zahtevnost oblike: ${latestQuoteInput.complexityLabel || latestQuoteInput.complexity || ''}`,
+    `Dostopnost objekta: ${latestQuoteInput.accessLabel || latestQuoteInput.access || ''}`,
+    `Odstranitev stare kritine: ${latestQuoteInput.tearOff ? 'da' : 'ne'}`,
+    `Toplotna izolacija: ${latestQuoteInput.insulation ? 'da' : 'ne'}`,
+    `Žlebovi in osnovna kleparska dela: ${latestQuoteInput.gutters ? 'da' : 'ne'}`,
+  ];
+}
+
 quoteForm.addEventListener('submit', (event) => {
   event.preventDefault();
   const input = readQuoteForm(quoteForm);
-  const result = calculateRoofQuote(input);
-  renderQuote(result);
+
+  try {
+    const result = calculateRoofQuote(input);
+    renderQuote(result, input);
+  } catch (error) {
+    renderQuoteError(error);
+  }
 });
 
 leadForm.addEventListener('submit', (event) => {
@@ -57,6 +113,8 @@ leadForm.addEventListener('submit', (event) => {
     `Email: ${data.get('email') || ''}`,
     `Lokacija: ${data.get('location') || ''}`,
     '',
+    ...buildEstimateEmailSection(),
+    '',
     'Opis:',
     `${data.get('message') || ''}`,
     '',
@@ -66,4 +124,9 @@ leadForm.addEventListener('submit', (event) => {
   window.location.href = `mailto:info@astragroup.si?subject=${subject}&body=${body}`;
 });
 
-renderQuote(calculateRoofQuote(readQuoteForm(quoteForm)));
+try {
+  const initialInput = readQuoteForm(quoteForm);
+  renderQuote(calculateRoofQuote(initialInput), initialInput);
+} catch (error) {
+  renderQuoteError(error);
+}

@@ -11,6 +11,7 @@ Ta paket je pripravljen kot začetni GitHub skeleton:
 - statični prototip kalkulatorja,
 - osnovna cenovna konfiguracija,
 - testirana pricing logika,
+- osnutek email povpraševanja z zadnjim informativnim izračunom,
 - produktni brief,
 - pravila za AI koderja,
 - prvi PR nalog za GPT-5.5 koderja.
