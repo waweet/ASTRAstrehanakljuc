@@ -12,7 +12,19 @@ test('lead form blocks missing consent and includes the latest estimate when con
   assert.match(html, /name="existingRoofRemoval"/);
   assert.match(html, /name="wasteHandling"/);
 
-  const { quoteForm, leadForm, priceRange, priceNote, quoteError, leadError, windowLocation } = setupDom();
+  const {
+    quoteForm,
+    leadForm,
+    priceRange,
+    priceNote,
+    priceDrivers,
+    selectedSummary,
+    includedItems,
+    notConfirmed,
+    quoteError,
+    leadError,
+    windowLocation,
+  } = setupDom();
   const appUrl = pathToFileURL(new URL('../app/app.js', import.meta.url).pathname);
   appUrl.search = `?test=${Date.now()}`;
 
@@ -21,6 +33,7 @@ test('lead form blocks missing consent and includes the latest estimate when con
   assert.match(priceRange.textContent, /\+ DDV/);
   assert.equal(quoteError.hidden, true);
   assert.match(priceNote.textContent, /Informativni razpon ni zavezujoča ponudba/);
+  assert.doesNotMatch(priceNote.textContent, /dokončna ponudba|končna ponudba/i);
 
   quoteForm.setValue('area', '');
   quoteForm.submit();
@@ -56,6 +69,14 @@ test('lead form blocks missing consent and includes the latest estimate when con
   quoteForm.submit();
   assert.equal(quoteError.hidden, true);
   assert.match(priceRange.textContent, /\+ DDV/);
+  assert.ok(hasRenderedText(priceDrivers, 'Zahtevna'));
+  assert.ok(hasRenderedText(priceDrivers, 'Strm / zahtevnejši naklon'));
+  assert.ok(hasRenderedText(priceDrivers, '2 dimnika'));
+  assert.ok(hasRenderedText(priceDrivers, '1 strešno okno'));
+  assert.ok(hasRenderedText(selectedSummary, 'Opečna kritina'));
+  assert.ok(hasRenderedText(selectedSummary, 'Zahtevni kleparski detajli'));
+  assert.ok(hasRenderedText(includedItems, 'Vključen odvoz pri zahtevnem dostopu'));
+  assert.ok(hasRenderedText(notConfirmed, 'dejansko stanje konstrukcije'));
 
   leadForm.submit();
   assert.equal(leadError.hidden, false);
@@ -65,21 +86,34 @@ test('lead form blocks missing consent and includes the latest estimate when con
   leadForm.setChecked('consent', true);
   leadForm.submit();
 
+  const subject = decodeURIComponent(windowLocation.href.split('subject=')[1].split('&body=')[0]);
   const body = decodeURIComponent(windowLocation.href.split('body=')[1]);
   assert.match(windowLocation.href, /^mailto:info@astragroup\.si/);
+  assert.match(subject, /Povpraševanje za streho na ključ - informativni izračun/);
+  assert.match(subject, /Test Stranka/);
+  assert.match(subject, /Ljubljana/);
+  assert.match(body, /Kontakt\n---/);
   assert.match(body, /Ime: Test Stranka/);
   assert.match(body, /Telefon: 040 000 000/);
-  assert.match(body, /Opis:\nStreha je starejša, lokacija Ljubljana, izvedba v nekaj mesecih\./);
+  assert.match(body, /Lokacija \/ objekt\n---/);
+  assert.match(body, /Opis strehe\n---\nStreha je starejša, lokacija Ljubljana, izvedba v nekaj mesecih\./);
   assert.match(body, /Zadnji informativni izračun:/);
   assert.match(body, /\+ DDV/);
   assert.match(body, /Informativni razpon ni zavezujoča ponudba/);
+  assert.match(body, /Izbrani podatki kalkulatorja\n---/);
   assert.match(body, /Naklon strehe: Strm \/ zahtevnejši naklon/);
   assert.match(body, /Število dimnikov: 2/);
   assert.match(body, /Število strešnih oken: 1/);
   assert.match(body, /Zahtevnost kleparskih detajlov: Zahtevni kleparski detajli/);
   assert.match(body, /Odstranitev obstoječe kritine: Zahtevna odstranitev/);
   assert.match(body, /Odvoz odpadnega materiala: Vključen odvoz pri zahtevnem dostopu/);
-  assert.match(body, /Soglasje za uporabo podatkov za odgovor: potrjeno/);
+  assert.match(body, /Dejavniki, ki vplivajo na oceno\n---/);
+  assert.match(body, /- Strm \/ zahtevnejši naklon/);
+  assert.match(body, /Kaj še ni potrjeno\n---/);
+  assert.match(body, /- dejansko stanje konstrukcije/);
+  assert.match(body, /Soglasje\n---/);
+  assert.match(body, /Opomba o informativnosti\n---/);
+  assert.match(body, /Za natančno ponudbo je potreben pregled podatkov/);
 });
 
 function setupDom() {
@@ -205,6 +239,10 @@ function setupDom() {
   const priceRange = createNode();
   const priceNote = createNode();
   const breakdown = createNode();
+  const priceDrivers = createNode();
+  const selectedSummary = createNode();
+  const includedItems = createNode();
+  const notConfirmed = createNode();
   const quoteError = createNode();
   const leadError = createNode();
   quoteError.hidden = true;
@@ -216,6 +254,10 @@ function setupDom() {
     ['#price-range', priceRange],
     ['#price-note', priceNote],
     ['#breakdown', breakdown],
+    ['#price-drivers', priceDrivers],
+    ['#selected-summary', selectedSummary],
+    ['#included-items', includedItems],
+    ['#not-confirmed', notConfirmed],
     ['#quote-error', quoteError],
     ['#lead-error', leadError],
   ]);
@@ -237,6 +279,10 @@ function setupDom() {
     leadForm,
     priceRange,
     priceNote,
+    priceDrivers,
+    selectedSummary,
+    includedItems,
+    notConfirmed,
     quoteError,
     leadError,
     windowLocation,
@@ -253,4 +299,15 @@ function createNode() {
       this.children.push(...nodes);
     },
   };
+}
+
+function hasRenderedText(node, pattern) {
+  return collectText(node).includes(pattern);
+}
+
+function collectText(node) {
+  return [
+    node.textContent,
+    ...node.children.flatMap((child) => collectText(child)),
+  ].join(' ');
 }

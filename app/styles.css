@@ -285,16 +285,34 @@ fieldset {
   top: 20px;
 }
 
+.result-panel h3 {
+  margin: 22px 0 10px;
+  font-size: 15px;
+}
+
 #price-range {
   font-size: clamp(30px, 4vw, 52px);
 }
 
+#price-drivers,
+#included-items,
+#not-confirmed {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 20px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+#selected-summary,
 #breakdown {
   display: grid;
   gap: 10px;
-  margin: 24px 0;
+  margin: 0;
 }
 
+#selected-summary div,
 #breakdown div {
   display: flex;
   justify-content: space-between;
@@ -303,13 +321,32 @@ fieldset {
   padding-bottom: 10px;
 }
 
+#selected-summary dt,
 #breakdown dt {
   color: var(--muted);
 }
 
+#selected-summary dd,
 #breakdown dd {
   margin: 0;
   font-weight: 800;
+  text-align: right;
+}
+
+#breakdown {
+  margin: 24px 0;
+}
+
+.result-section {
+  display: grid;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.result-section p {
+  color: var(--muted);
+  line-height: 1.55;
+  margin: 0;
 }
 
 .lead-section {
