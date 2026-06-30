@@ -40,11 +40,23 @@ Pred produkcijo še manjka:
 - pregled pravnega besedila o informativnem in nezavezujočem izračunu,
 - bolj natančen model za oder, dvigalo, snegolove, dolžino žlebov in regijske razlike.
 
-## PR-004 - Lead capture brez zunanjih servisov
+## PR-004 - Razlaga rezultata in struktura povpraševanja
 
-- pripraviti bolj strukturiran povzetek povpraševanja,
-- dodati GDPR besedilo in privolitev,
-- ohraniti `mailto:` tok, dokler backend ali CRM ni potrjen.
+Izvedeno v PR-004:
+
+- rezultat prikazuje informativni razpon z jasnejšo razlago,
+- dodani so glavni dejavniki, ki vplivajo na oceno,
+- dodan je povzetek izbranih podatkov,
+- dodan je seznam stvari, ki še niso potrjene,
+- `mailto:` povpraševanje je strukturirano po razdelkih za lažji ASTRA pregled,
+- statična arhitektura in brez-backend tok ostajata nespremenjena.
+
+Pred produkcijo še manjka:
+
+- odločitev, ali `mailto:` zadostuje ali je potreben backend/CRM,
+- dodajanje fotografij strehe, če bo podprt realen oddajni tok,
+- pravni pregled besedil o informativnem in nezavezujočem izračunu,
+- potrjena politika obdelave povpraševanj in hranjenja podatkov.
 
 ## PR-005 - Priprava na produkcijski tok
 
