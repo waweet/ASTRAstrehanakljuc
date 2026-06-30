@@ -46,7 +46,7 @@
         </article>
         <article>
           <h2>2. Ocena</h2>
-          <p>Aplikacija izračuna okvirni razpon, ne dokončne ponudbe.</p>
+          <p>Aplikacija izračuna okvirni razpon, ne zavezujoče ponudbe.</p>
         </article>
         <article>
           <h2>3. Povpraševanje</h2>
@@ -158,7 +158,53 @@
           <fieldset>
             <legend>Dodatna dela</legend>
             <label class="check"><input name="insulation" type="checkbox" /> Toplotna izolacija</label>
-            <label class="check"><input name="gutters" type="checkbox" checked /> Žlebovi in osnovna kleparska dela</label>
+            <label class="check"><input name="gutters" type="checkbox" checked /> Žlebovi in osnovna kleparska dela - okvirno, če natančne dolžine niso znane</label>
+          </fieldset>
+
+          <fieldset class="expanded-addons">
+            <legend>Dodatne postavke strehe</legend>
+
+            <div class="addon-group">
+              <h3>Sloji strehe</h3>
+              <label class="check"><input name="vaporPermeableMembrane" type="checkbox" /> Paroprepustna folija</label>
+              <label class="check"><input name="roofBoarding" type="checkbox" /> Deskanje / opaž</label>
+              <label class="check"><input name="roofBattens" type="checkbox" /> Strešne letve</label>
+              <label class="check"><input name="counterBattens" type="checkbox" /> Kontra letve</label>
+              <label class="check"><input name="ventilationLayer" type="checkbox" /> Prezračevalni sloj</label>
+            </div>
+
+            <div class="addon-group">
+              <h3>Zaključki kritine</h3>
+              <label class="check"><input name="ridgeTiles" type="checkbox" /> Slemenjaki / sleme</label>
+              <label class="check"><input name="edgeTiles" type="checkbox" /> Krajnik / krajna kritina</label>
+              <div class="field compact-field">
+                <label for="roofVentCount">Število zračnikov na strehi</label>
+                <input id="roofVentCount" name="roofVentCount" type="number" min="0" step="1" value="0" inputmode="numeric" />
+              </div>
+              <label class="check"><input name="snowGuards" type="checkbox" /> Snegolovi</label>
+            </div>
+
+            <div class="addon-group">
+              <h3>Kleparska dela</h3>
+              <div class="field compact-field">
+                <label for="gutterLength">Dolžina žleba v m</label>
+                <input id="gutterLength" name="gutterLength" type="number" min="0" step="0.1" value="0" inputmode="decimal" />
+              </div>
+              <div class="field compact-field">
+                <label for="downpipeLength">Dolžina vertikalne odtočne cevi v m</label>
+                <input id="downpipeLength" name="downpipeLength" type="number" min="0" step="0.1" value="0" inputmode="decimal" />
+              </div>
+              <label class="check"><input name="valleyFlashing" type="checkbox" /> Žlota</label>
+              <label class="check"><input name="eavesFlashing" type="checkbox" /> Kapna obroba</label>
+              <label class="check"><input name="windBoardFlashing" type="checkbox" /> Čelna / vetrna obroba</label>
+            </div>
+
+            <div class="addon-group">
+              <h3>Dostop in priprava</h3>
+              <label class="check"><input name="scaffolding" type="checkbox" /> Oder</label>
+              <label class="check"><input name="manualMaterialCarry" type="checkbox" /> Ročni prenos materiala</label>
+              <label class="check"><input name="siteSetup" type="checkbox" /> Postavitev gradbišča</label>
+            </div>
           </fieldset>
 
           <button class="button primary" type="submit">Izračunaj informativni razpon</button>

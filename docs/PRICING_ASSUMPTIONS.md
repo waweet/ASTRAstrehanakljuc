@@ -36,6 +36,10 @@ The current calculator uses placeholder values for:
 - waste handling cost,
 - insulation cost,
 - gutters/basic flashing cost,
+- selected roof layer addons,
+- selected roofing finish addons,
+- selected sheet-metal addons,
+- selected site/access addons,
 - estimate low/high range factors,
 - minimum project value.
 
@@ -43,7 +47,7 @@ These values remain configurable in `src/pricing-config.js`. They are active onl
 
 ## Review-only expanded assumptions
 
-The following groups list possible future pricing inputs and line items. They are not active in the calculator in PR-005.
+The following groups list expanded pricing inputs and line items. PR-006 activates only a selected subset; the remaining rows are still review-only and do not affect the live estimate.
 
 Future PRs may move approved assumptions into `src/pricing-config.js`, but only after ASTRA review and with tests for any new calculation logic.
 
@@ -53,11 +57,46 @@ The CSV also includes:
 - orientation-only m² package rows from the `Paketi m2` sheet,
 - rows from the `Manjka v AI` sheet where the source workbook says a price is not yet available.
 
-Rows copied from the spreadsheet remain `review only - not yet active in calculator`, even when the spreadsheet has a numeric value.
+Rows copied from the spreadsheet remain `review only - not yet active in calculator`, even when the spreadsheet has a numeric value, unless a later PR explicitly activates that row or adds a matching active runtime row.
+
+## PR-006 activated subset
+
+PR-006 activates only a selected subset of the PR-005 catalog. Runtime values now live in `src/pricing-config.js` and calculation logic lives in `src/pricing-engine.js`.
+
+Activated roof layers:
+
+- paroprepustna folija,
+- deskanje / opaž,
+- strešne letve,
+- kontra letve,
+- prezračevalni sloj.
+
+Activated roofing finish elements:
+
+- slemenjaki / sleme,
+- krajnik / krajna kritina,
+- zračniki na strehi,
+- snegolovi.
+
+Activated sheet-metal work:
+
+- žleb,
+- vertikalna odtočna cev,
+- žlota,
+- kapna obroba,
+- čelna / vetrna obroba.
+
+Activated site/access extras:
+
+- oder,
+- ročni prenos materiala,
+- postavitev gradbišča.
+
+All other expanded catalog rows remain `review only - not yet active in calculator`.
 
 ## Roof layers
 
-Review-only assumptions for roof layer composition:
+Active and review-only assumptions for roof layer composition:
 
 - paroprepustna folija,
 - parna zapora,
@@ -71,7 +110,7 @@ Review-only assumptions for roof layer composition:
 - sekundarna kritina,
 - zaščitna mrežica proti insektom pri prezračevanju.
 
-Status: `review only - not yet active in calculator`.
+Status: selected rows are `active in calculator`; remaining rows are `review only - not yet active in calculator`.
 
 ## Structural timber
 
@@ -89,7 +128,7 @@ Status: `review only - not yet active in calculator`.
 
 ## Roofing elements
 
-Review-only assumptions for roof covering and finishing elements:
+Active and review-only assumptions for roof covering and finishing elements:
 
 - osnovna kritina,
 - slemenjaki / sleme,
@@ -104,11 +143,11 @@ Review-only assumptions for roof covering and finishing elements:
 - strešne stopnice,
 - pohodna rešetka / dimnikarska pot.
 
-Status: `review only - not yet active in calculator`.
+Status: selected rows are `active in calculator`; remaining rows are `review only - not yet active in calculator`.
 
 ## Sheet-metal work
 
-Review-only assumptions for sheet-metal work:
+Active and review-only assumptions for sheet-metal work:
 
 - žleb,
 - vertikalna odtočna cev,
@@ -123,11 +162,11 @@ Review-only assumptions for sheet-metal work:
 - lovilec vode / kotliček,
 - kolena in spojni elementi.
 
-Status: `review only - not yet active in calculator`.
+Status: selected rows are `active in calculator`; remaining rows are `review only - not yet active in calculator`.
 
 ## Removal, waste, access and site setup
 
-Review-only assumptions for removal, waste handling, access and site setup:
+Active and review-only assumptions for removal, waste handling, access and site setup:
 
 - demontaža obstoječe kritine,
 - demontaža letev,
@@ -143,7 +182,7 @@ Review-only assumptions for removal, waste handling, access and site setup:
 - delo na višini,
 - dodatna zaščita pri zahtevnem naklonu.
 
-Status: `review only - not yet active in calculator`.
+Status: selected rows are `active in calculator`; remaining rows are `review only - not yet active in calculator`.
 
 ## Approval checklist
 

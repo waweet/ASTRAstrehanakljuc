@@ -30,6 +30,10 @@ export function calculateRoofQuote(input, config = pricingConfig) {
   const wasteHandling = getConfigItem(config.wasteHandlingCosts, input.wasteHandling || 'none', 'odvoz odpadnega materiala');
   const chimneyCount = readNonNegativeCount(input.chimneyCount, 'Število dimnikov');
   const roofWindowCount = readNonNegativeCount(input.roofWindowCount, 'Število strešnih oken');
+  const roofVentCount = readNonNegativeCount(input.roofVentCount, 'Število zračnikov na strehi');
+  const gutterLength = readNonNegativeLength(input.gutterLength, 'Dolžina žleba');
+  const downpipeLength = readNonNegativeLength(input.downpipeLength, 'Dolžina vertikalne odtočne cevi');
+  const hasExactGutterLengths = gutterLength > 0 || downpipeLength > 0;
 
   const breakdown = [];
   const base = area * covering.eurPerM2;
@@ -42,6 +46,7 @@ export function calculateRoofQuote(input, config = pricingConfig) {
 
   const addonTotal = Object.entries(config.addons).reduce((sum, [key, addon]) => {
     if (!input[key]) return sum;
+    if (key === 'gutters' && hasExactGutterLengths) return sum;
     const amount = area * addon.eurPerM2;
     breakdown.push({ label: addon.label, amount });
     return sum + amount;
@@ -62,7 +67,21 @@ export function calculateRoofQuote(input, config = pricingConfig) {
     breakdown.push({ label: wasteHandling.label, amount: wasteHandlingTotal });
   }
 
-  const subtotalBeforeMultipliers = base + existingRoofRemovalTotal + addonTotal + chimneyTotal + roofWindowTotal + wasteHandlingTotal;
+  const roofLayerTotal = addAreaBasedAddons(breakdown, config.roofLayerAddons, input, area);
+  const roofFinishTotal = addRoofFinishAddons(breakdown, config.roofFinishAddons, input, area, roofVentCount);
+  const sheetMetalTotal = addSheetMetalAddons(breakdown, config.sheetMetalAddons, input, area, gutterLength, downpipeLength);
+  const siteAccessTotal = addSiteAccessAddons(breakdown, config.siteAccessAddons, input, area);
+
+  const subtotalBeforeMultipliers = base
+    + existingRoofRemovalTotal
+    + addonTotal
+    + chimneyTotal
+    + roofWindowTotal
+    + wasteHandlingTotal
+    + roofLayerTotal
+    + roofFinishTotal
+    + sheetMetalTotal
+    + siteAccessTotal;
   const complexityAdjustment = subtotalBeforeMultipliers * (complexity.factor - 1);
   const afterComplexity = subtotalBeforeMultipliers + complexityAdjustment;
   const accessAdjustment = afterComplexity * (access.factor - 1);
@@ -151,6 +170,104 @@ function readNonNegativeCount(value, label) {
   }
 
   return count;
+}
+
+function readNonNegativeLength(value, label) {
+  if (value === undefined || value === null || value === '') {
+    return 0;
+  }
+
+  const length = Number(value);
+  if (!Number.isFinite(length) || length < 0) {
+    throw new Error(`${label} mora biti število 0 ali več.`);
+  }
+
+  return length;
+}
+
+function addAreaBasedAddons(breakdown, addons, input, area) {
+  return Object.entries(addons || {}).reduce((sum, [key, addon]) => {
+    if (!input[key]) return sum;
+    const amount = area * addon.eurPerM2;
+    breakdown.push({ label: addon.label, amount });
+    return sum + amount;
+  }, 0);
+}
+
+function addRoofFinishAddons(breakdown, addons, input, area, roofVentCount) {
+  let total = 0;
+
+  for (const key of ['ridgeTiles', 'edgeTiles', 'snowGuards']) {
+    const addon = addons?.[key];
+    if (!addon || !input[key]) continue;
+    const length = area * addon.defaultM1PerM2;
+    const amount = length * addon.eurPerM1;
+    breakdown.push({ label: `${addon.label} (ocena ${formatQuantity(length)} m)`, amount });
+    total += amount;
+  }
+
+  const roofVents = addons?.roofVents;
+  if (roofVents && roofVentCount > 0) {
+    const amount = roofVentCount * roofVents.eurPerUnit;
+    breakdown.push({ label: `${roofVents.label} (${roofVentCount})`, amount });
+    total += amount;
+  }
+
+  return total;
+}
+
+function addSheetMetalAddons(breakdown, addons, input, area, gutterLength, downpipeLength) {
+  let total = 0;
+
+  for (const [length, key] of [[gutterLength, 'gutterLength'], [downpipeLength, 'downpipeLength']]) {
+    const addon = addons?.[key];
+    if (!addon || length <= 0) continue;
+    const amount = length * addon.eurPerM1;
+    breakdown.push({ label: `${addon.label} (${formatQuantity(length)} m)`, amount });
+    total += amount;
+  }
+
+  for (const key of ['valleyFlashing', 'eavesFlashing', 'windBoardFlashing']) {
+    const addon = addons?.[key];
+    if (!addon || !input[key]) continue;
+    const length = area * addon.defaultM1PerM2;
+    const amount = length * addon.eurPerM1;
+    breakdown.push({ label: `${addon.label} (ocena ${formatQuantity(length)} m)`, amount });
+    total += amount;
+  }
+
+  return total;
+}
+
+function addSiteAccessAddons(breakdown, addons, input, area) {
+  let total = 0;
+
+  const scaffolding = addons?.scaffolding;
+  if (scaffolding && input.scaffolding) {
+    const scaffoldArea = area * scaffolding.defaultM2PerRoofM2;
+    const amount = scaffoldArea * scaffolding.eurPerM2;
+    breakdown.push({ label: `${scaffolding.label} (ocena ${formatQuantity(scaffoldArea)} m²)`, amount });
+    total += amount;
+  }
+
+  const manualCarry = addons?.manualMaterialCarry;
+  if (manualCarry && input.manualMaterialCarry) {
+    const amount = area * manualCarry.eurPerM2;
+    breakdown.push({ label: manualCarry.label, amount });
+    total += amount;
+  }
+
+  const siteSetup = addons?.siteSetup;
+  if (siteSetup && input.siteSetup) {
+    breakdown.push({ label: siteSetup.label, amount: siteSetup.eurFixed });
+    total += siteSetup.eurFixed;
+  }
+
+  return total;
+}
+
+function formatQuantity(value) {
+  return Number.isInteger(value) ? String(value) : value.toFixed(1);
 }
 
 function roundToNearestTen(value) {

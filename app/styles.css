@@ -264,6 +264,35 @@ fieldset {
   gap: 10px;
 }
 
+.expanded-addons {
+  gap: 16px;
+}
+
+.addon-group {
+  display: grid;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.addon-group:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.addon-group h3 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.compact-field {
+  gap: 6px;
+}
+
+.compact-field label {
+  font-size: 14px;
+}
+
 .check {
   display: flex;
   align-items: center;

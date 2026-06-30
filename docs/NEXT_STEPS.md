@@ -77,6 +77,23 @@ Pred naslednjo razširitvijo modela je potreben ASTRA pregled:
 - za katere postavke je potreben dobaviteljski predračun,
 - katere potrjene postavke se lahko kasneje prenesejo v `src/pricing-config.js`.
 
+## PR-006 - Aktivacija izbranih cenovnih postavk
+
+Izvedeno v PR-006:
+
+- izbran podsklop PR-005 kataloga je premaknjen v `src/pricing-config.js`,
+- kalkulator podpira dodatne sloje strehe, zaključke kritine, kleparska dela ter dostop/pripravo,
+- `docs/pricing-assumptions.csv` označi samo dejansko aktivirane vrstice kot `active_in_calculator`,
+- rezultat in mailto povpraševanje vključujeta izbrane nove postavke,
+- rezultat ostaja informativen in nezavezujoč.
+
+Pred produkcijo še manjka:
+
+- ASTRA potrditev vseh aktiviranih vrednosti,
+- odločitev, ali checkbox dovolilnice zadostujejo ali so potrebne natančne količine,
+- pregled poenostavitev za oder, snegolove in kleparske obrobe,
+- pravni pregled informativnega/neobvezujočega besedila.
+
 ## Kasnejši produkcijski tok
 
 - odločitev o backendu, email pošiljanju ali CRM povezavi,
