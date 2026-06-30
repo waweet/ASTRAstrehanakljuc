@@ -6,6 +6,8 @@ Ta cenovni model je delovna osnova. Številke niso potrjen končni cenik podjetj
 
 Vrednosti v `src/pricing-config.js` so placeholder predpostavke za MVP. Pred javno uporabo jih mora pregledati in potrditi ASTRA group d.o.o.
 
+Razširjen pregled aktivnih in prihodnjih cenovnih predpostavk je v `docs/PRICING_ASSUMPTIONS.md`. CSV različica za pregled je v `docs/pricing-assumptions.csv`.
+
 ## Osnovna formula
 
 ```text
@@ -64,6 +66,13 @@ Pravila:
 - UI ne sme vsebovati trdo zapisanih cen,
 - vsaka sprememba pricing logike mora imeti test,
 - pri javni uporabi mora biti jasno zapisano, da cena ni zavezujoča.
+
+Pomembna ločnica:
+
+- `src/pricing-config.js` vsebuje vrednosti, ki so aktivne v kalkulatorju,
+- `docs/PRICING_ASSUMPTIONS.md` in `docs/pricing-assumptions.csv` vsebujeta tudi pregledne postavke, ki še niso aktivne in ne vplivajo na izračun.
+
+Pregledne postavke se lahko premaknejo v konfiguracijo šele po potrditvi ASTRA in z ustreznimi testi.
 
 ## Začetne kategorije
 
@@ -154,3 +163,5 @@ V naslednji fazi naj pricing model podpira:
 - oder,
 - regijski faktor,
 - ločen prikaz material / delo / dodatki.
+
+PR-005 dodaja katalog cenovnih predpostavk za pregled, ne spreminja pa aktivnega izračuna.
