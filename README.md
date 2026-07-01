@@ -35,6 +35,15 @@ Nato odpri:
 http://localhost:5173/app/
 ```
 
+## MVP test deployment
+
+The app is prepared for limited MVP testing as a static frontend.
+
+- app path: `/app/`
+- local run command: `npm start`
+- deployment docs: `docs/DEPLOYMENT.md`
+- backend: not added yet; inquiry uses `mailto:` plus copy fallback
+
 ## Testi
 
 Zahteva Node.js 20+.
