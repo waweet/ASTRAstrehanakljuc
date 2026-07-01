@@ -1,8 +1,9 @@
 export const pricingConfig = {
   currency: 'EUR',
   vatLabel: '+ DDV',
-  // PR-003 values are placeholder assumptions for MVP modeling only.
-  // ASTRA group d.o.o. must review and confirm all pricing before production use.
+  // Active values are ASTRA-confirmed MVP test values for limited testing.
+  // They remain informative and non-binding and are not final offer prices.
+  // Public production rollout still requires final ASTRA business and legal review.
   baseRatesByCovering: {
     clay_tiles: {
       label: 'Opečna kritina',
@@ -123,8 +124,9 @@ export const pricingConfig = {
       eurPerM2: 24,
     },
   },
-  // PR-006 values come from the reviewed PR-005 pricing assumptions catalog.
-  // They remain informative MVP assumptions until final ASTRA production approval.
+  // PR-006 values are ASTRA-confirmed MVP test values from the reviewed catalog.
+  // They remain informative and non-binding and are not final offer prices.
+  // Public production rollout still requires final ASTRA business and legal review.
   roofLayerAddons: {
     vaporPermeableMembrane: {
       label: 'Paroprepustna folija',

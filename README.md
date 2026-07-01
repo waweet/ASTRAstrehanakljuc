@@ -6,15 +6,15 @@ Namen aplikacije je hitro informativno ovrednotenje strehe, zajem dodatnih podat
 
 ## Trenutno stanje
 
-Ta paket je pripravljen kot začetni GitHub skeleton:
+MVP je pripravljen za omejeno testiranje z majhno skupino uporabnikov.
 
-- statični prototip kalkulatorja,
-- osnovna cenovna konfiguracija,
-- testirana pricing logika,
-- osnutek email povpraševanja z zadnjim informativnim izračunom,
-- produktni brief,
-- pravila za AI koderja,
-- prvi PR nalog za GPT-5.5 koderja.
+Trenutno stanje:
+
+- statična aplikacija brez backenda,
+- informativni kalkulator z ASTRA-potrjenimi MVP testnimi vrednostmi,
+- nezavezujoč cenovni razpon,
+- `mailto:` tok za povpraševanje,
+- brez produkcijsko-finalnega pravnega/GDPR pregleda.
 
 ## Lokalni zagon
 
@@ -51,12 +51,12 @@ AGENTS.md                    Projektna pravila za AI agente
 
 ## Opozorilo glede cen
 
-Cene v `src/pricing-config.js` so začetne delovne predpostavke. Pred javno uporabo jih mora potrditi ASTRA group d.o.o.
+Cene v `src/pricing-config.js` so ASTRA-potrjene vrednosti za omejeno MVP testiranje. Izračun ostaja informativen in nezavezujoč; natančna ponudba zahteva pregled podatkov, fotografij in izvedbenih pogojev.
 
 ## Naslednji korak
 
-Prvi nalog za GPT-5.5 koderja je v:
+Po MVP testiranju je naslednji PR odvisen od povratnih informacij:
 
-```text
-tasks/PR-001-GPT55.md
-```
+- mobile/visual polish, če se testerji težko znajdejo v obrazcu,
+- backend/lead delivery, če je `mailto:` nezanesljiv,
+- pricing refinement, če ASTRA ugotovi, da razponi potrebujejo prilagoditve.
